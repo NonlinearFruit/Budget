@@ -1,0 +1,73 @@
+@attribute [Route(Constants.BankAccount.EditorPath)]
+
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Components
+@using Budget.Shared
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+<h3>Edit Account</h3>
+
+
+<div class="row">
+    <EditForm Model="@Model" OnValidSubmit="@Update">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            Balance: <InputNumber id="balance" @bind-Value="Model.LiveTotal" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Name: <InputText id="name" @bind-Value="Model.Name" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Color: <InputColor @bind-Value="Model.Color" class="form-control" />
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-success">Update</button>
+    </EditForm>
+
+</div>
+
+<br />
+<br />
+<a href="@Constants.BankAccount.CataloguePath">Back to List</a>
+
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    private BankAccount? Model = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id == null)
+        {
+            NavigationManager.NavigateTo(Constants.BankAccount.CataloguePath);
+        }
+
+        var response = await Http.GetAsync($"Api/BankAccount/{Id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseText = await response.Content.ReadAsStringAsync();
+            Model = JsonConvert.DeserializeObject<BankAccount>(responseText);
+        }
+        else
+        {
+            NavigationManager.NavigateTo(Constants.BankAccount.CataloguePath);
+        }
+    }
+
+    private async Task Update()
+    {
+        await Http.PutAsJsonAsync($"Api/BankAccount/{Model.Id}", Model);
+        NavigationManager.NavigateTo(Constants.BankAccount.CataloguePath);
+    }
+}

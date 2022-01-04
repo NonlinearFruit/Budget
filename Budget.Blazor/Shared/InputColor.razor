@@ -1,0 +1,238 @@
+@inherits InputBase<string>
+
+<input type="color" class="form-control @CssClass" @bind="@CurrentValue" />
+<a class="btn btn-info" onclick="@Generate">Generate</a>
+
+@code {
+    private Random _random = new();
+
+    protected override void OnInitialized()
+    {
+        CurrentValue ??= "#FFFFFF";
+    }
+
+    protected override bool TryParseValueFromString(string? value, out string result, out string? validationErrorMessage)
+    {
+        result = value;
+        validationErrorMessage = null;
+        return true;
+    }
+
+    private void Generate()
+    {
+        var index = _random.Next(Colors.Length);
+        CurrentValue = Colors[index];
+    }
+
+    private string[] Colors = //https://materialui.co/colors
+    {
+        "#FFEBEE",
+        "#FFCDD2",
+        "#EF9A9A",
+        "#E57373",
+        // "#EF535",
+        // "#F4433",
+        // "#E5393",
+        // "#D32F2",
+        // "#C6282",
+        // "#B71C1",
+        //
+        // "#FCE4E",
+        // "#F8BBD",
+        // "#F48FB",
+        // "#F0629",
+        // "#EC407",
+        // "#E91E6",
+        // "#D81B6",
+        // "#C2185",
+        // "#AD145",
+        // "#880E4",
+
+        "#F3E5F5",
+        "#E1BEE7",
+        "#CE93D8",
+        "#BA68C8",
+        "#AB47BC",
+        "#9C27B0",
+        "#8E24AA",
+        "#7B1FA2",
+        // "#6A1B9",
+        // "#4A148",
+
+        "#EDE7F6",
+        "#D1C4E9",
+        "#B39DDB",
+        "#9575CD",
+        "#7E57C2",
+        // "#673AB",
+        // "#5E35B",
+        // "#512DA",
+        // "#4527A",
+        // "#311B9",
+
+        "#E8EAF6",
+        "#C5CAE9",
+        "#9FA8DA",
+        "#7986CB",
+        "#5C6BC0",
+        // "#3F51B",
+        // "#3949A",
+        // "#303F9",
+        // "#28359",
+        // "#1A237",
+
+        "#E3F2FD",
+        "#BBDEFB",
+        "#90CAF9",
+        "#64B5F6",
+        "#42A5F5",
+        // "#2196F",
+        // "#1E88E",
+        // "#1976D",
+        // "#1565C",
+        // "#0D47A",
+
+        "#E1F5FE",
+        "#B3E5FC",
+        "#81D4FA",
+        "#4FC3F7",
+        "#29B6F6",
+        // "#03A9F",
+        // "#039BE",
+        // "#0288D",
+        // "#0277B",
+        // "#01579",
+
+        "#E0F7FA",
+        "#B2EBF2",
+        "#80DEEA",
+        "#4DD0E1",
+        "#26C6DA",
+        // "#00BCD",
+        // "#00ACC",
+        // "#0097A",
+        // "#00838",
+        // "#00606",
+
+        "#E0F2F1",
+        "#B2DFDB",
+        "#80CBC4",
+        "#4DB6AC",
+        "#26A69A",
+        // "#00968",
+        // "#00897",
+        // "#00796",
+        // "#00695",
+        // "#004D4",
+
+        "#E8F5E9",
+        "#C8E6C9",
+        "#A5D6A7",
+        "#81C784",
+        "#66BB6A",
+        // "#4CAF5",
+        // "#43A04",
+        // "#388E3",
+        // "#2E7D3",
+        // "#1B5E2",
+
+        "#F1F8E9",
+        "#DCEDC8",
+        "#C5E1A5",
+        "#AED581",
+        "#9CCC65",
+        // "#8BC34",
+        // "#7CB34",
+        // "#689F3",
+        // "#558B2",
+        // "#33691",
+        //
+        // "#F9FBE",
+        // "#F0F4C",
+        // "#E6EE9",
+        // "#DCE77",
+        // "#D4E15",
+        // "#CDDC3",
+        // "#C0CA3",
+        // "#AFB42",
+        // "#9E9D2",
+        // "#82771",
+        //
+        // "#FFFDE",
+        // "#FFF9C",
+        // "#FFF59",
+        // "#FFF17",
+        // "#FFEE5",
+        // "#FFEB3",
+        // "#FDD83",
+        // "#FBC02",
+        // "#F9A82",
+        // "#F57F1",
+
+        "#FFF8E1",
+        "#FFECB3",
+        "#FFE082",
+        "#FFD54F",
+        "#FFCA28",
+        // "#FFC10",
+        // "#FFB30",
+        // "#FFA00",
+        // "#FF8F0",
+        // "#FF6F0",
+
+        "#FFF3E0",
+        "#FFE0B2",
+        "#FFCC80",
+        "#FFB74D",
+        "#FF9800",
+        // "#FF980",
+        // "#FB8C0",
+        // "#F57C0",
+        // "#EF6C0",
+        // "#E6510",
+        //
+        // "#FBE9E",
+        // "#FFCCB",
+        // "#FFAB9",
+        // "#FF8A6",
+        // "#FF704",
+        // "#FF572",
+        // "#F4511",
+        // "#E64A1",
+        // "#D8431",
+        // "#BF360",
+        //
+        // "#EFEBE",
+        // "#D7CCC",
+        // "#BCAAA",
+        // "#A1887",
+        // "#8D6E6",
+        // "#79554",
+        // "#6D4C4",
+        // "#5D403",
+        // "#4E342",
+        // "#3E272",
+
+        "#FAFAFA",
+        "#F5F5F5",
+        "#EEEEEE",
+        "#E0E0E0",
+        "#BDBDBD",
+        // "#9E9E9",
+        // "#75757",
+        // "#61616",
+        // "#42424",
+        // "#21212",
+
+        "#ECEFF1",
+        "#CFD8DC",
+        "#B0BEC5",
+        "#90A4AE",
+        "#78909C",
+        // "#607D8",
+        // "#546E7",
+        // "#455A6",
+        // "#37474",
+        // "#26323",
+    };
+}

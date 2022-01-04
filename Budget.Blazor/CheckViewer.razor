@@ -1,0 +1,53 @@
+@attribute [Route(Constants.Check.ViewerPath)]
+
+@using Newtonsoft.Json
+@using Budget.Shared
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+
+<h3>Check #@Model.CheckNumber Details</h3>
+<br />
+<p>Amount: <em>@Model.Amount</em></p>
+<br />
+<p>Recipient: <em>@Model.Recipient</em></p>
+<br />
+<p>Description: <em>@Model.Description</em></p>
+<br />
+<p>Withdrawn: <em>@Model.Withdrawn</em></p>
+<br />
+Error message: <span>@errorMessage</span>
+<br />
+<a href="/Checks">Back to List</a>
+
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    private string errorMessage = "";
+
+    public Check Model { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id == null)
+        {
+            NavigationManager.NavigateTo(Constants.Check.CataloguePath);
+        }
+
+        var response = await Http.GetAsync($"Api/Check/{Id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            errorMessage = "none";
+            var responseText = await response.Content.ReadAsStringAsync();
+            Model = JsonConvert.DeserializeObject<Check>(responseText);
+        }
+        else
+        {
+            errorMessage = await response.Content.ReadAsStringAsync();
+        }
+    }
+}

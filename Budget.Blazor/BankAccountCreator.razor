@@ -1,0 +1,59 @@
+@attribute [Route(Constants.BankAccount.CreatorPath)]
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Components
+@using Budget.Shared
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+<h3>Create an Account</h3>
+
+<div class="row">
+    <EditForm Model="@Model" OnValidSubmit="@Insert">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            Balance: <InputNumber @bind-Value="Model.LiveTotal" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Name: <InputText @bind-Value="Model.Name" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Color: <InputColor @bind-Value="Model.Color" class="form-control" />
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-success">Submit</button>
+    </EditForm>
+
+</div>
+
+<br />
+<br />
+<a href="@Constants.BankAccount.CataloguePath">Back to List</a>
+
+
+@code {
+    private BankAccount Model = new();
+
+    private async Task Insert()
+    {
+        var response = await Http.PostAsJsonAsync("Api/BankAccount", Model);
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseText = await response.Content.ReadAsStringAsync();
+            var mewAccount = JsonConvert.DeserializeObject<BankAccount>(responseText);
+            if (mewAccount?.Id != null)
+                NavigationManager.NavigateTo(Constants.BankAccount.GetEditorPath(mewAccount.Id));
+        }
+        else
+        {
+            NavigationManager.NavigateTo(Constants.BankAccount.CreatorPath);
+        }
+    }
+}

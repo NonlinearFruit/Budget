@@ -1,0 +1,18 @@
+using Microsoft.AspNetCore.Components.Web;
+using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Budget.Blazor;
+
+var builder = WebAssemblyHostBuilder.CreateDefault(args);
+builder.RootComponents.Add<App>("#app");
+builder.RootComponents.Add<HeadOutlet>("head::after");
+
+builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri("https://localhost:7162") });
+builder.Services.AddTransient<INavigationItem, BankAccountCatalogue>();
+builder.Services.AddTransient<INavigationItem, CategoryCatalogue>();
+builder.Services.AddTransient<INavigationItem, CheckCatalogue>();
+builder.Services.AddTransient<INavigationItem, ForecastCatalogue>();
+builder.Services.AddTransient<INavigationItem, Home>();
+builder.Services.AddTransient<INavigationItem, TagCatalogue>();
+builder.Services.AddTransient<INavigationItem, TransactionCatalogue>();
+
+await builder.Build().RunAsync();

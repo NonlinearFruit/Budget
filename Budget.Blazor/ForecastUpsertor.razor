@@ -1,0 +1,95 @@
+@attribute [Route(Constants.Forecast.UpsertPath)]
+@using Microsoft.AspNetCore.Components
+@using Budget.Shared
+@using Newtonsoft.Json
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+@if (Id == null)
+{
+    <h3>Create an Forecast</h3>
+}
+else
+{
+    <h3>Update an Forecast</h3>
+}
+
+<div class="row">
+    <EditForm Model="@Forecast" OnValidSubmit="@Upsert">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            Year: <InputNumber @bind-Value="Forecast.Year" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Month: <InputNumber @bind-Value="Forecast.Month" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Category: <InputSelect @bind-Value="Forecast.CategoryId" class="form-control">
+                @foreach (var category in Categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            Amount: <InputNumber @bind-Value="Forecast.Amount" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Notes: <InputTextArea @bind-Value="Forecast.Notes" class="form-control" />
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-success">Submit</button>
+    </EditForm>
+
+</div>
+
+<br />
+<br />
+<a href="@Constants.Forecast.CataloguePath">Back to List</a>
+
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    private bool IsUpdate => Id == null;
+    private IList<Category> Categories { get; set; } = new List<Category>();
+    private Forecast Forecast = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Categories = await Http.GetFromJsonAsync<IList<Category>>("Api/Category");
+        if (IsUpdate)
+            Forecast = new()
+            {
+                Year = DateTime.Now.AddMonths(1).Year,
+                Month = DateTime.Now.AddMonths(1).Month,
+                CategoryId = Categories.First().Id
+            };
+        else
+            Forecast = await Http.GetFromJsonAsync<Forecast>($"Api/Forecast/{Id}");
+    }
+
+    private async Task Upsert()
+    {
+        HttpResponseMessage response = null;
+        if(IsUpdate)
+            response = await Http.PostAsJsonAsync("Api/Forecast", Forecast);
+        else
+            response = await Http.PutAsJsonAsync($"Api/Forecast/{Forecast.Id}", Forecast);
+
+        if (response.IsSuccessStatusCode)
+            NavigationManager.NavigateTo(Constants.Forecast.CataloguePath);
+        else
+            NavigationManager.NavigateTo(Constants.Forecast.GetUpsertPath());
+    }
+}

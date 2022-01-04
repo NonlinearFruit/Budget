@@ -1,0 +1,59 @@
+@attribute [Route(Constants.Tag.CataloguePath)]
+@using Budget.Shared
+@implements INavigationItem
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime Js
+
+<h3>@Title</h3>
+
+@if (Tags == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var tag in Tags)
+            {
+                <tr>
+                    <td style="background-color: @tag.Color"><a href="@Constants.Tag.GetViewerPath(tag.Id)"> @tag.Name</a></td>
+                    <td><a href="@Constants.Tag.GetEditorPath(tag.Id)" class="btn btn-info">Edit</a></td>
+                    <td><a @onclick="(() => DeleteAccount(tag.Id))" class="btn btn-danger">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a href="@Constants.Tag.CreatorPath">Create a Tag</a>
+}
+
+
+
+@code {
+    public string Path => Constants.Tag.CataloguePath;
+    public string Title => "Tags";
+    public string Icon => "oi-tags";
+    private List<Tag>? Tags;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Tags = await Http.GetFromJsonAsync<List<Tag>>("Api/Tag");
+    }
+
+    private async Task DeleteAccount(long id)
+    {
+        var confirm = await Js.InvokeAsync<bool>("confirm", "Do you want to delete this tag?");
+        if (confirm)
+        {
+            await Http.DeleteAsync($"Api/Tag/{id}");
+            NavigationManager.NavigateTo(Constants.Tag.CataloguePath, forceLoad: true);
+        }
+    }
+}

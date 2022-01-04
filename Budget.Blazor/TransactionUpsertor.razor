@@ -1,0 +1,114 @@
+@attribute [Route(Constants.Transaction.UpsertPath)]
+@using Microsoft.AspNetCore.Components
+@using Budget.Shared
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+@if (Id == null)
+{
+    <h3>Create an Transaction</h3>
+}
+else
+{
+    <h3>Update an Transaction</h3>
+}
+
+<div class="row">
+    <EditForm Model="@Transaction" OnValidSubmit="@Upsert">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            Account: <InputSelect @bind-Value="Transaction.AccountId" class="form-control">
+                @foreach (var account in Accounts)
+                {
+                    <option value="@account.Id">@account.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            Category: <InputSelect @bind-Value="Transaction.CategoryId" class="form-control">
+                @foreach (var category in Categories)
+                {
+                    <option value="@category.Id">@category.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            Tag: <InputSelect @bind-Value="Transaction.TagId" class="form-control">
+                @foreach (var tag in Tags)
+                {
+                    <option value="@tag.Id">@tag.Name</option>
+                }
+            </InputSelect>
+        </div>
+
+        <div class="form-group">
+            Amount: <InputNumber @bind-Value="Transaction.Amount" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            When: <InputDate @bind-Value="Transaction.When" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Description: <InputTextArea @bind-Value="Transaction.Description" class="form-control" />
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-success">Submit</button>
+    </EditForm>
+
+</div>
+
+<br />
+<br />
+<a href="@Constants.Transaction.CataloguePath">Back to List</a>
+
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    private bool IsUpdate => Id == null;
+    private IList<Category> Categories { get; set; } = new List<Category>();
+    private IList<BankAccount> Accounts { get; set; } = new List<BankAccount>();
+    private IList<Tag> Tags { get; set; } = new List<Tag>();
+    private Transaction Transaction = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        Categories = await Http.GetFromJsonAsync<IList<Category>>("Api/Category");
+        Tags = await Http.GetFromJsonAsync<IList<Tag>>("Api/Tag");
+        Accounts = await Http.GetFromJsonAsync<IList<BankAccount>>("Api/BankAccount");
+        if (IsUpdate)
+            Transaction = new()
+            {
+                AccountId = Accounts.First().Id,
+                CategoryId = Categories.First().Id,
+                TagId = Tags.First().Id,
+                When = DateTime.Now
+            };
+        else
+            Transaction = await Http.GetFromJsonAsync<Transaction>($"Api/Transaction/{Id}");
+    }
+
+    private async Task Upsert()
+    {
+        Transaction.When = DateTime.SpecifyKind(Transaction.When, DateTimeKind.Utc);
+        if (IsUpdate)
+        {
+            await Http.PostAsJsonAsync("Api/Transaction", Transaction);
+            NavigationManager.NavigateTo(Constants.Transaction.GetUpsertPath(), forceLoad:true);
+        }
+        else
+        {
+            await Http.PutAsJsonAsync($"Api/Transaction/{Transaction.Id}", Transaction);
+            NavigationManager.NavigateTo(Constants.Transaction.CataloguePath);
+        }
+    }
+}

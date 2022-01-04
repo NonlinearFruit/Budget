@@ -1,0 +1,35 @@
+@attribute [Route(Constants.Category.ViewerPath)]
+
+@using Newtonsoft.Json
+@using Budget.Shared
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+
+<h3 style="background-color: @Category.Color">@Category.Name Category Details</h3>
+
+<br />
+<TransactionCatalogueElement Transactions="@Transactions"></TransactionCatalogueElement>
+<br />
+<a href="@Constants.Category.ViewerPath">Back to List</a>
+
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    public Category Category { get; set; } = new();
+    public IList<Transaction> Transactions { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id == null)
+        {
+            NavigationManager.NavigateTo(Constants.Category.CataloguePath);
+        }
+
+        Category = await Http.GetFromJsonAsync<Category>($"Api/Category/{Id}");
+        Transactions = await Http.GetFromJsonAsync<IList<Transaction>>(Constants.Api.GetTransactions(Category));
+    }
+}

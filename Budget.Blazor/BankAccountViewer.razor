@@ -1,0 +1,36 @@
+@attribute [Route(Constants.BankAccount.ViewerPath)]
+
+@using Newtonsoft.Json
+@using Budget.Shared
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+<h3 style="background-color: @Account.Color">@Account.Name Account Details</h3>
+
+<br />
+<p>Account balance: <em>$@Account.LiveTotal</em></p>
+<br />
+<TransactionCatalogueElement Transactions="@Transactions"/>
+<br />
+<a href="@Constants.BankAccount.CataloguePath">Back to List</a>
+
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    public IList<Transaction> Transactions { get; set; }
+
+    private BankAccount? Account { get; set; } = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id == null)
+        {
+            NavigationManager.NavigateTo(Constants.BankAccount.CataloguePath);
+        }
+        Account = await Http.GetFromJsonAsync<BankAccount>($"Api/BankAccount/{Id}");
+        Transactions = await Http.GetFromJsonAsync<IList<Transaction>>(Constants.Api.GetTransactions(Account));
+    }
+}

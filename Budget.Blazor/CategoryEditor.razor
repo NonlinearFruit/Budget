@@ -1,0 +1,69 @@
+@attribute [Route(Constants.Category.EditorPath)]
+
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Components
+@using Budget.Shared
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+<h3>Edit Category</h3>
+
+
+<div class="row">
+    <EditForm Model="@Category" OnValidSubmit="@Update">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            Color: <InputColor id="color" @bind-Value="Category.Color" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Name: <InputText id="name" @bind-Value="Category.Name" class="form-control" />
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-success">Update</button>
+    </EditForm>
+
+</div>
+
+<br />
+<br />
+<a href="@Constants.Category.CataloguePath">Back to List</a>
+
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    private Category Category = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id == null)
+        {
+            NavigationManager.NavigateTo(Constants.Category.CataloguePath);
+        }
+
+        var response = await Http.GetAsync($"Api/Category/{Id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseText = await response.Content.ReadAsStringAsync();
+            Category = JsonConvert.DeserializeObject<Category>(responseText);
+        }
+        else
+        {
+            NavigationManager.NavigateTo(Constants.Category.CataloguePath);
+        }
+    }
+
+    private async Task Update()
+    {
+        await Http.PutAsJsonAsync($"Api/Category/{Category.Id}", Category);
+        NavigationManager.NavigateTo(Constants.Category.CataloguePath);
+    }
+}

@@ -1,0 +1,37 @@
+@attribute [Route(Constants.Tag.ViewerPath)]
+
+@using Newtonsoft.Json
+@using Budget.Shared
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+
+<h3 style="background-color: @Tag.Color">@Tag.Name Tag Details</h3>
+
+<br />
+<TransactionCatalogueElement Transactions="@Transactions"></TransactionCatalogueElement>
+<br />
+<a href="@Constants.Tag.CataloguePath">Back to List</a>
+
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    private string errorMessage = "";
+
+    private Tag? Tag { get; set; } = new();
+    public IList<Transaction> Transactions { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id == null)
+        {
+            NavigationManager.NavigateTo(Constants.Tag.CataloguePath);
+        }
+
+        Tag = await Http.GetFromJsonAsync<Tag>($"Api/Tag/{Id}");
+        Transactions = await Http.GetFromJsonAsync<IList<Transaction>>(Constants.Api.GetTransactions(Tag));
+    }
+}

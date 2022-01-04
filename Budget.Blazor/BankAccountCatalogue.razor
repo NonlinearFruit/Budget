@@ -1,0 +1,61 @@
+@attribute [Route(Constants.BankAccount.CataloguePath)]
+@using Budget.Shared
+@implements INavigationItem
+@inject HttpClient Http
+@inject NavigationManager NavigationManager
+@inject IJSRuntime Js
+
+<h3>@Title</h3>
+
+@if (Accounts == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Available balance</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var account in Accounts)
+            {
+                <tr>
+                    <td style="background-color: @account.Color"><a href="@Constants.BankAccount.GetViewerPath(account.Id)">@account.Name</a></td>
+                    <td>$@account.LiveTotal</td>
+                    <td><a href="@Constants.BankAccount.GetEditorPath(account.Id)" class="btn btn-info">Edit</a></td>
+                    <td><a @onclick="(() => DeleteAccount(account.Id))" class="btn btn-danger">Delete</a></td>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+    <a href="@Constants.BankAccount.CreatorPath">Create an Account</a>
+}
+
+
+
+@code {
+    public string Path => Constants.BankAccount.CataloguePath;
+    public string Title => "Accounts";
+    public string Icon => "oi-dollar";
+    private List<BankAccount>? Accounts;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Accounts = await Http.GetFromJsonAsync<List<BankAccount>>("Api/BankAccount");
+    }
+
+    private async Task DeleteAccount(long id)
+    {
+        var confirm = await Js.InvokeAsync<bool>("confirm", "Do you want to delete this account?");
+        if (confirm)
+        {
+            await Http.DeleteAsync($"Api/BankAccount/{id}");
+            NavigationManager.NavigateTo(Constants.BankAccount.CataloguePath, forceLoad: true);
+        }
+    }
+}

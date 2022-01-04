@@ -1,0 +1,81 @@
+@attribute [Route(Constants.Check.EditorPath)]
+
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Components
+@using Budget.Shared
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+<h3>Edit Check</h3>
+
+
+<div class="row">
+    <EditForm Model="@Model" OnValidSubmit="@Update">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            Check Number: <InputNumber id="number" @bind-Value="Model.CheckNumber" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Amount: <InputNumber id="amount" @bind-Value="Model.Amount" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Recipient: <InputText id="recipient" @bind-Value="Model.Recipient" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Desciption: <InputText id="description" @bind-Value="Model.Description" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Withdrawn: <InputCheckbox id="withdrawn" @bind-Value="Model.Withdrawn" class="form-control" />
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-success">Update</button>
+    </EditForm>
+
+</div>
+
+<br />
+<br />
+<a href="@Constants.Check.CataloguePath">Back to List</a>
+
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    private Check Model = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id == null)
+        {
+            NavigationManager.NavigateTo(Constants.Check.CataloguePath);
+        }
+
+        var response = await Http.GetAsync($"Api/Check/{Id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseText = await response.Content.ReadAsStringAsync();
+            Model = JsonConvert.DeserializeObject<Check>(responseText);
+        }
+        else
+        {
+            NavigationManager.NavigateTo(Constants.Check.CataloguePath);
+        }
+    }
+
+    private async Task Update()
+    {
+        await Http.PutAsJsonAsync($"Api/Check/{Model.Id}", Model);
+        NavigationManager.NavigateTo(Constants.Check.CataloguePath);
+    }
+}

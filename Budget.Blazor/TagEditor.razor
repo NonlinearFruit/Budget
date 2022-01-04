@@ -1,0 +1,69 @@
+@attribute [Route(Constants.Tag.EditorPath)]
+
+@using Newtonsoft.Json
+@using Microsoft.AspNetCore.Components
+@using Budget.Shared
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+<h3>Edit Tag</h3>
+
+
+<div class="row">
+    <EditForm Model="@Model" OnValidSubmit="@Update">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            Color: <InputColor id="color" @bind-Value="Model.Color" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Name: <InputText id="name" @bind-Value="Model.Name" class="form-control" />
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-success">Update</button>
+    </EditForm>
+
+</div>
+
+<br />
+<br />
+<a href="@Constants.Tag.CataloguePath">Back to List</a>
+
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    private Tag? Model = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (Id == null)
+        {
+            NavigationManager.NavigateTo(Constants.Tag.CataloguePath);
+        }
+
+        var response = await Http.GetAsync($"Api/Tag/{Id}");
+
+        if (response.IsSuccessStatusCode)
+        {
+            var responseText = await response.Content.ReadAsStringAsync();
+            Model = JsonConvert.DeserializeObject<Tag>(responseText);
+        }
+        else
+        {
+            NavigationManager.NavigateTo(Constants.Tag.CataloguePath);
+        }
+    }
+
+    private async Task Update()
+    {
+        await Http.PutAsJsonAsync($"Api/Tag/{Model.Id}", Model);
+        NavigationManager.NavigateTo(Constants.Tag.CataloguePath);
+    }
+}
