@@ -13,6 +13,34 @@ public class DatabaseContext : DbContext, IDatabaseContext
         optionsBuilder.LogTo(Console.WriteLine);
     }
 
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder
+            .Entity<BankAccount>()
+            .Property(p => p.Created)
+            .HasDefaultValueSql("now()");
+        builder
+            .Entity<Tag>()
+            .Property(p => p.Created)
+            .HasDefaultValueSql("now()");
+        builder
+            .Entity<Transaction>()
+            .Property(p => p.Created)
+            .HasDefaultValueSql("now()");
+        builder
+            .Entity<Forecast>()
+            .Property(p => p.Created)
+            .HasDefaultValueSql("now()");
+        builder
+            .Entity<Category>()
+            .Property(p => p.Created)
+            .HasDefaultValueSql("now()");
+        builder
+            .Entity<Check>()
+            .Property(p => p.Created)
+            .HasDefaultValueSql("now()");
+    }
+
     public DbSet<BankAccount> BankAccounts { get; set; }
     public DbSet<Tag> Tags { get; set; }
     public DbSet<Transaction> Transactions { get; set; }

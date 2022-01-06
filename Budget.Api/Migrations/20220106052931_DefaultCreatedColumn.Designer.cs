@@ -3,6 +3,7 @@ using System;
 using Budget.Api;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,10 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace Budget.Api.Migrations
 {
     [DbContext(typeof(DatabaseContext))]
-    partial class DatabaseContextModelSnapshot : ModelSnapshot
+    [Migration("20220106052931_DefaultCreatedColumn")]
+    partial class DefaultCreatedColumn
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -37,7 +39,7 @@ namespace Budget.Api.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
+                        .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<decimal>("LiveTotal")
                         .HasColumnType("numeric");
@@ -65,7 +67,7 @@ namespace Budget.Api.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
+                        .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -92,7 +94,7 @@ namespace Budget.Api.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
+                        .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
@@ -125,7 +127,7 @@ namespace Budget.Api.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
+                        .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<int>("Month")
                         .HasColumnType("integer");
@@ -158,7 +160,7 @@ namespace Budget.Api.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
+                        .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<string>("Name")
                         .HasColumnType("text");
@@ -188,7 +190,7 @@ namespace Budget.Api.Migrations
                     b.Property<DateTime>("Created")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("timestamp with time zone")
-                        .HasDefaultValueSql("now()");
+                        .HasDefaultValueSql("timezone('utc', now())");
 
                     b.Property<string>("Description")
                         .HasColumnType("text");
