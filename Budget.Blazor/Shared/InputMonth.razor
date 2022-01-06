@@ -1,0 +1,11 @@
+@inherits InputBase<DateTime>
+
+<input type="month" class="form-control @CssClass" @bind="@CurrentValue" />
+
+@code {
+    protected override bool TryParseValueFromString(string? value, out DateTime result, out string? validationErrorMessage)
+    {
+        validationErrorMessage = "";
+        return DateTime.TryParse(value, out result);
+    }
+}

@@ -21,11 +21,7 @@ else
         <ValidationSummary />
 
         <div class="form-group">
-            Year: <InputNumber @bind-Value="Forecast.Year" class="form-control" />
-        </div>
-
-        <div class="form-group">
-            Month: <InputNumber @bind-Value="Forecast.Month" class="form-control" />
+            Month: <InputMonth @bind-Value="DateTimeWrapper" class="form-control" />
         </div>
 
         <div class="form-group">
@@ -60,6 +56,16 @@ else
 @code {
     [Parameter]
     public long? Id { get; set; }
+
+    public DateTime DateTimeWrapper
+    {
+        get => new DateTime(Forecast.Year == 0? 1 : Forecast.Year, Forecast.Month == 0? 1 : Forecast.Month, 1);
+        set
+        {
+            Forecast.Year = value.Year;
+            Forecast.Month = value.Month;
+        }
+    }
 
     private bool IsUpdate => Id == null;
     private IList<Category> Categories { get; set; } = new List<Category>();
