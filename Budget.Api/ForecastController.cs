@@ -22,6 +22,12 @@ namespace Budget.Api
             return await _context.Forecasts.ToListAsync();
         }
 
+        [HttpGet("Test")]
+        public async Task<ActionResult<IEnumerable<ForecastTest>>> GetForecastTests()
+        {
+            throw new NotImplementedException();
+        }
+
         // GET: api/Forecast/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Forecast>> GetForecast(long id)
@@ -34,6 +40,27 @@ namespace Budget.Api
             }
 
             return forecast;
+        }
+
+        // GET: api/Forecast/5/Test
+        [HttpGet("{id}/Test")]
+        public async Task<ActionResult<ForecastTest>> GetForecastTest(long id)
+        {
+            var forecast = await _context.Forecasts.FindAsync(id);
+            if (forecast == null)
+                return NotFound();
+            forecast.Category = await _context.Categories.FindAsync(forecast.CategoryId);
+            var sumOfTransactions = _context
+                .Transactions
+                .Where(t => t.CategoryId == forecast.CategoryId)
+                .Where(t => t.When.Year == forecast.Year)
+                .Where(t => t.When.Month == forecast.Month)
+                .Sum(t => t.Amount);
+            return new ForecastTest()
+            {
+                Forecast = forecast,
+                SpentLessThanForecasted = sumOfTransactions <= forecast.Amount
+            };
         }
 
         // PUT: api/Forecast/5

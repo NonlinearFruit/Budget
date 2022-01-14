@@ -177,21 +177,24 @@ public class TransactionControllerTests : DbContextTests
             Assert.Empty(response.Value);
         }
 
-        private void ArrangeTransaction(int? year = null, int? month = null, int account = 1, int category = 1, int tag = 1)
+        private void ArrangeTransaction(int? year = null, int? month = null, long account = 1, long category = 1, long tag = 1)
         {
-            for (var i = 0; i < account; i++)
+            if (_arrangeContext.BankAccounts.Find(account) == null)
                 _arrangeContext.BankAccounts.Add(new()
                 {
+                    Id = account,
                     Color = ""
                 });
-            for (var i = 0; i < category; i++)
+            if (_arrangeContext.Categories.Find(category) == null)
                 _arrangeContext.Categories.Add(new()
                 {
+                    Id = category,
                     Color = ""
                 });
-            for (var i = 0; i < tag; i++)
+            if (_arrangeContext.Tags.Find(tag) == null)
                 _arrangeContext.Tags.Add(new()
                 {
+                    Id = tag,
                     Color = ""
                 });
             _arrangeContext.Transactions.Add(new()
