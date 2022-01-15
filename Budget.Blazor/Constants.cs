@@ -55,10 +55,9 @@ public static class Constants
     public static class Check
     {
         public const string CataloguePath = "/Checks";
-        public const string CreatorPath = "/CreateCheck";
-        public const string EditorPath = "/EditCheck/{Id:long}";
+        public const string UpsertorPath = "/UpsertCheck/{Id:long?}";
         public const string ViewerPath = "/Check/{Id:long}";
-        public static string GetEditorPath(long id) => $"/EditCheck/{id}";
+        public static string GetUpsertPath(long? id = null) => $"/UpsertCheck/{id?.ToString() ?? ""}";
         public static string GetViewerPath(long id) => $"/Check/{id}";
     }
 

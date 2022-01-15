@@ -1,17 +1,23 @@
-@attribute [Route(Constants.Check.EditorPath)]
+@attribute [Route(Constants.Check.UpsertorPath)]
 
-@using Newtonsoft.Json
 @using Microsoft.AspNetCore.Components
 @using Budget.Shared
 
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 
-<h3>Edit Check</h3>
+@if (Id == null)
+{
+    <h3>Create a Check</h3>
+}
+else
+{
+    <h3>Update a Check</h3>
+}
 
 
 <div class="row">
-    <EditForm Model="@Model" OnValidSubmit="@Update">
+    <EditForm Model="@Model" OnValidSubmit="@Upsert">
         <DataAnnotationsValidator />
         <ValidationSummary />
 
@@ -20,11 +26,15 @@
         </div>
 
         <div class="form-group">
-            Amount: <InputNumber id="amount" @bind-Value="Model.Amount" class="form-control" />
+            When: <InputDate id="when" @bind-Value="Model.When" class="form-control" />
         </div>
 
         <div class="form-group">
             Recipient: <InputText id="recipient" @bind-Value="Model.Recipient" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Amount: <InputNumber id="amount" @bind-Value="Model.Amount" class="form-control" />
         </div>
 
         <div class="form-group">
@@ -51,31 +61,34 @@
     [Parameter]
     public long? Id { get; set; }
 
+    private bool IsUpdate => Id == null;
     private Check Model = new();
 
     protected override async Task OnInitializedAsync()
     {
-        if (Id == null)
+        if (IsUpdate)
         {
-            NavigationManager.NavigateTo(Constants.Check.CataloguePath);
+            Model = new()
+            {
+                When = DateTime.Now
+            };
         }
+        else
+            Model = await Http.GetFromJsonAsync<Check>($"Api/Check/{Id}");
+    }
 
-        var response = await Http.GetAsync($"Api/Check/{Id}");
-
-        if (response.IsSuccessStatusCode)
+    private async Task Upsert()
+    {
+        Model.When = DateTime.SpecifyKind(Model.When, DateTimeKind.Utc);
+        if (IsUpdate)
         {
-            var responseText = await response.Content.ReadAsStringAsync();
-            Model = JsonConvert.DeserializeObject<Check>(responseText);
+            await Http.PutAsJsonAsync($"Api/Check", Model);
+            NavigationManager.NavigateTo(Constants.Check.CataloguePath);
         }
         else
         {
+            await Http.PutAsJsonAsync($"Api/Check/{Model.Id}", Model);
             NavigationManager.NavigateTo(Constants.Check.CataloguePath);
         }
-    }
-
-    private async Task Update()
-    {
-        await Http.PutAsJsonAsync($"Api/Check/{Model.Id}", Model);
-        NavigationManager.NavigateTo(Constants.Check.CataloguePath);
     }
 }

@@ -11,5 +11,6 @@ public class Check
     public string? Description { get; set; }
     public decimal Amount { get; set; }
     public bool Withdrawn { get; set; }
+    public DateTime When { get; set; }
     public DateTime Created { get; set; }
 }

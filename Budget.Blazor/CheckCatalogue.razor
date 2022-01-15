@@ -17,8 +17,9 @@ else
         <thead>
             <tr>
                 <th>Number</th>
-                <th>Amount</th>
+                <th>When</th>
                 <th>Recipient</th>
+                <th>Amount</th>
                 <th>Description</th>
                 <th>Withdrawn</th>
             </tr>
@@ -28,18 +29,19 @@ else
             {
                 <tr>
                     <td><a href="@Constants.Check.GetViewerPath(check.Id)"> @check.CheckNumber</a></td>
+                    <td>@check.When.ToShortDateString()</td>
                     <td>$@check.Amount</td>
                     <td>@check.Recipient</td>
                     <td>@check.Description</td>
                     <td>@check.Withdrawn</td>
-                    <td><a href="@Constants.Check.GetEditorPath(check.Id)" class="btn btn-info">Edit</a></td>
+                    <td><a href="@Constants.Check.GetUpsertPath(check.Id)" class="btn btn-info">Edit</a></td>
                     <td><a @onclick="(() => Delete(check.Id))" class="btn btn-danger">Delete</a></td>
                 </tr>
             }
         </tbody>
     </table>
 
-    <a href="@Constants.Check.CreatorPath">Create an Check</a>
+    <a href="@Constants.Check.GetUpsertPath()">Create an Check</a>
 }
 
 
