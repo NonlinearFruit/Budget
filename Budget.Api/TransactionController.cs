@@ -39,7 +39,9 @@ namespace Budget.Api
                 transactions = transactions.Where(t => t.AccountId == account);
             if (tag.HasValue)
                 transactions = transactions.Where(t => t.TagId == tag);
-            var list = await transactions.ToListAsync();
+            var list = await transactions
+                .OrderByDescending(t => t.When)
+                .ToListAsync();
             foreach (var transaction in list)
             {
                 if (transaction.Account != null) transaction.Account.Transactions = null;

@@ -35,6 +35,20 @@ public class TransactionControllerTests : DbContextTests
         }
 
         [Fact]
+        public async Task oldest_transactions_last()
+        {
+            var year = 2021;
+            var olderTransactionCategory = 151;
+            ArrangeTransaction(category: 151, year: year);
+            ArrangeTransaction(year: year + 1);
+
+            var response = await _controller.GetTransactions();
+
+            var lastTransaction = response.Value.Last();
+            Assert.Equal(olderTransactionCategory, lastTransaction.CategoryId);
+        }
+
+        [Fact]
         public async Task includes_bank_account()
         {
             ArrangeTransaction(account: 1);

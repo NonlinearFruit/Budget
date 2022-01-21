@@ -27,8 +27,7 @@ Error message: <span>@errorMessage</span>
     public long? Id { get; set; }
 
     private string errorMessage = "";
-
-    public Check Model { get; set; } = new();
+    private Check Model { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
