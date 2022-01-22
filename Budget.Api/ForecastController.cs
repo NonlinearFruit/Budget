@@ -59,7 +59,8 @@ namespace Budget.Api
             return new ForecastTest()
             {
                 Forecast = forecast,
-                SpentLessThanForecasted = sumOfTransactions <= forecast.Amount
+                SpentLessThanForecasted = sumOfTransactions <= forecast.Amount,
+                SpentAmount = sumOfTransactions
             };
         }
 

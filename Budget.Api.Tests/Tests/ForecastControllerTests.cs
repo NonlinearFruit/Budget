@@ -57,26 +57,24 @@ public class ForecastControllerTests : DbContextTests
         }
 
         [Theory]
-        [InlineData(100, true)]
-        [InlineData(100, true, 100)]
-        [InlineData(100, true, 10)]
-        [InlineData(10, false, 100)]
-        [InlineData(100, true, 50, 50)]
-        [InlineData(100, false, 75, 50)]
-        public async Task spends_less_than_forecasted_works(int total, bool shouldMatch, params int[] transactionAmounts)
+        [InlineData()]
+        [InlineData(100)]
+        [InlineData(100, 10)]
+        [InlineData(100, 50, 50)]
+        public async Task includes_transaction_total(params int[] transactionAmounts)
         {
             var year = 2022;
             var month = 6;
             var categoryId = 7;
             var forecastId = 14;
-            ArrangeForecast(month: month, year: year, category: categoryId, amount: total, id: forecastId);
+            ArrangeForecast(month: month, year: year, category: categoryId, id: forecastId);
             foreach (var amount in transactionAmounts)
                 ArrangeTransaction(month: month, year: year, amount: amount, category: categoryId);
             await _arrangeContext.SaveChangesAsync();
 
             var response = await _controller.GetForecastTest(forecastId);
 
-            Assert.Equal(shouldMatch, response.Value?.SpentLessThanForecasted);
+            Assert.Equal(transactionAmounts.Sum(), response.Value?.SpentAmount);
         }
 
         [Fact]
