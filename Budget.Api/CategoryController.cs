@@ -19,7 +19,7 @@ namespace Budget.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Category>>> GetCategories()
         {
-            return await _context.Categories.ToListAsync();
+            return await _context.Categories.OrderBy(c => c.Name).ToListAsync();
         }
 
         // GET: api/Category/5
