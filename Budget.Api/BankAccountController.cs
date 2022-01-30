@@ -20,7 +20,7 @@ namespace Budget.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BankAccount>>> GetBankAccounts()
         {
-            return await _context.BankAccounts.ToListAsync();
+            return await _context.BankAccounts.OrderBy(a => a.Name).ToListAsync();
         }
 
         // GET: api/BankAccount/Test

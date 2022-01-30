@@ -171,4 +171,28 @@ public class BankAccountControllerTests : DbContextTests
             Assert.False(test?.LiveMatchesSum);
         }
     }
+
+    public class GetBankAccounts : BankAccountControllerTests
+    {
+        [Fact]
+        public void accounts_are_alphabetized()
+        {
+            var first = "A";
+            var second = "B";
+            _assertContext.BankAccounts.Add(new BankAccount
+            {
+                Name = second, Color = ""
+            });
+            _assertContext.BankAccounts.Add(new BankAccount()
+            {
+                Name = first, Color = ""
+            });
+            _assertContext.SaveChanges();
+
+            var accounts = _controller.GetBankAccounts().Result.Value;
+
+            var account = accounts.First();
+            Assert.Equal(first, account.Name);
+        }
+    }
 }
