@@ -19,7 +19,7 @@ namespace Budget.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Tag>>> GetTags()
         {
-            return await _context.Tags.ToListAsync();
+            return await _context.Tags.OrderBy(t => t.Name).ToListAsync();
         }
 
         // GET: api/Tag/5
