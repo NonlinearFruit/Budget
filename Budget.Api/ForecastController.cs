@@ -23,9 +23,23 @@ namespace Budget.Api
         }
 
         [HttpGet("Test")]
-        public async Task<ActionResult<IEnumerable<ForecastTest>>> GetForecastTests()
+        public async Task<ActionResult<IEnumerable<ForecastTest>>> GetForecastTests([FromQuery] int year, [FromQuery] int month)
         {
-            throw new NotImplementedException();
+            return await _context
+                .Forecasts
+                .Where(f => f.Year == year)
+                .Where(f => f.Month == month)
+                .Select(f => new ForecastTest
+                {
+                    CategoryName = f.Category.Name,
+                    CategoryColor = f.Category.Color,
+                    Year = f.Year,
+                    Month = f.Month,
+                    ForecastedAmount = f.Amount,
+                    SpentAmount = f.Category.Transactions.Where(t => t.When.Year == f.Year).Where(t => t.When.Month == f.Month).Sum(t => t.Amount),
+                    Notes = f.Notes
+                })
+                .ToListAsync();
         }
 
         // GET: api/Forecast/5
