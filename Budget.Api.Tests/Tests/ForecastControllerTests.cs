@@ -31,14 +31,18 @@ public class ForecastControllerTests : DbContextTests
         [Fact]
         public async Task includes_forecast()
         {
+            var amount = 1123;
             var year = 2021;
+            var month = 3;
             var id = 14;
-            ArrangeForecast(year: year, id: id);
+            ArrangeForecast(year: year, month: month, id: id, amount: amount);
             await _arrangeContext.SaveChangesAsync();
 
             var response = await _controller.GetForecastTest(id);
 
-            Assert.Equal(year, response.Value?.Forecast.Year);
+            Assert.Equal(year, response.Value?.Year);
+            Assert.Equal(month, response.Value?.Month);
+            Assert.Equal(amount, response.Value?.ForecastedAmount);
         }
 
         [Fact]
@@ -47,13 +51,16 @@ public class ForecastControllerTests : DbContextTests
             var forecastId = 14;
             var categoryId = 4L;
             var name = "Food";
+            var color = "#FFFFFF";
             ArrangeForecast(id: forecastId, category: categoryId);
             _arrangeContext.Categories.Find(categoryId).Name = name;
+            _arrangeContext.Categories.Find(categoryId).Color = color;
             await _arrangeContext.SaveChangesAsync();
 
             var response = await _controller.GetForecastTest(forecastId);
 
-            Assert.Equal(name, response.Value?.Forecast.Category.Name);
+            Assert.Equal(name, response.Value?.CategoryName);
+            Assert.Equal(color, response.Value?.CategoryColor);
         }
 
         [Theory]

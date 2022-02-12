@@ -74,28 +74,29 @@ else
     protected override async Task OnInitializedAsync()
     {
         Categories = await Http.GetFromJsonAsync<IList<Category>>("Api/Category");
-        if (IsUpdate)
-            Forecast = new()
-            {
-                Year = DateTime.Now.AddMonths(1).Year,
-                Month = DateTime.Now.AddMonths(1).Month,
-                CategoryId = Categories.First().Id
-            };
-        else
-            Forecast = await Http.GetFromJsonAsync<Forecast>($"Api/Forecast/{Id}");
+        await Reset();
     }
 
     private async Task Upsert()
     {
-        HttpResponseMessage response = null;
         if(IsUpdate)
-            response = await Http.PostAsJsonAsync("Api/Forecast", Forecast);
+            await Http.PostAsJsonAsync("Api/Forecast", Forecast);
         else
-            response = await Http.PutAsJsonAsync($"Api/Forecast/{Forecast.Id}", Forecast);
+            await Http.PutAsJsonAsync($"Api/Forecast/{Forecast.Id}", Forecast);
 
-        if (response.IsSuccessStatusCode)
-            NavigationManager.NavigateTo(Constants.Forecast.CataloguePath);
+        await Reset();
+    }
+
+    private async Task Reset()
+    {
+        if (IsUpdate)
+            Forecast = new()
+            {
+                Year = DateTime.Now.AddDays(10).Year,
+                Month = DateTime.Now.AddDays(10).Month,
+                CategoryId = Categories.First().Id
+            };
         else
-            NavigationManager.NavigateTo(Constants.Forecast.GetUpsertPath());
+            Forecast = await Http.GetFromJsonAsync<Forecast>($"Api/Forecast/{Id}");
     }
 }

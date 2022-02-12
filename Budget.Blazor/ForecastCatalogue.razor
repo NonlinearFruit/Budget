@@ -41,6 +41,7 @@ else
     </table>
 
     <a href="@Constants.Forecast.GetUpsertPath()">Create an Forecast</a>
+    <a href="" onclick="@Reload">Reload Forecasts</a>
 }
 
 
@@ -55,10 +56,7 @@ else
 
     protected override async Task OnInitializedAsync()
     {
-        Forecasts = await Http.GetFromJsonAsync<IList<Forecast>>("Api/Forecast");
-        Categories = await Http.GetFromJsonAsync<IList<Category>>("Api/Category");
-        foreach (var forecast in Forecasts)
-            forecast.Category = Categories.FirstOrDefault(c => c.Id == forecast.CategoryId);
+        await Reload();
     }
 
     private async Task Delete(long id)
@@ -67,7 +65,15 @@ else
         if (confirm)
         {
             await Http.DeleteAsync($"Api/Forecast/{id}");
-            NavigationManager.NavigateTo(Constants.Forecast.CataloguePath, forceLoad: true);
+            await Reload();
         }
+    }
+
+    private async Task Reload()
+    {
+        Forecasts = await Http.GetFromJsonAsync<IList<Forecast>>("Api/Forecast");
+        Categories = await Http.GetFromJsonAsync<IList<Category>>("Api/Category");
+        foreach (var forecast in Forecasts)
+            forecast.Category = Categories.FirstOrDefault(c => c.Id == forecast.CategoryId);
     }
 }

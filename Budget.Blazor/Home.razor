@@ -1,14 +1,65 @@
 ﻿@attribute [Route(Constants.HomePath)]
+@using Budget.Shared
 @implements INavigationItem
+@inject HttpClient Http
 
 <PageTitle>@Title</PageTitle>
 
-<h1>Hello, world!</h1>
+<EditForm Model="@this" OnValidSubmit="@Reload">
+    <DataAnnotationsValidator/>
+    <ValidationSummary/>
+    <div class="form-group">
+        Month: <InputMonth @bind-Value="Time" class="form-control"/>
+    </div>
+    <br/>
+    <button type="submit" class="btn btn-success">Submit</button>
+</EditForm>
 
-Welcome to your new app
+<table class="table">
+    <thead>
+        <tr>
+            <th>Category</th>
+            <th>Expected</th>
+            <th>Actual</th>
+            <th>Notes</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var test in ForecastTests)
+        {
+            <tr>
+                <td style="background-color: @test.CategoryColor">@test.CategoryName</td>
+                <td style="background-color: @test.ForecastedAmount.ToColor()">@test.ForecastedAmount.ToCurrency()</td>
+                <td style="background-color: @test.SpentAmount.ToColor()">@test.SpentAmount.ToCurrency()</td>
+                <td>@test.Notes</td>
+            </tr>
+        }
+    </tbody>
+</table>
 
 @code {
     public string Path => Constants.HomePath;
     public string Title => "Home";
     public string Icon => "oi-home";
+
+    private DateTime Time { get; set; } = DateTime.Now;
+    private IList<ForecastTest> ForecastTests { get; set; } = new List<ForecastTest>();
+
+    private async Task Reload()
+    {
+        ForecastTests = await Http.GetFromJsonAsync<IList<ForecastTest>>(ApiConstants.Forecast.GetTestsPath(Time));
+        await AddTotalForecast();
+    }
+
+    private async Task AddTotalForecast()
+    {
+       ForecastTests.Add(new ForecastTest
+       {
+           CategoryName = "Total",
+           CategoryColor = "#FFFFFF",
+           ForecastedAmount = ForecastTests.Sum(t => t.ForecastedAmount),
+           SpentAmount = ForecastTests.Sum(t => t.SpentAmount),
+           SpentLessThanForecasted = ForecastTests.All(t => t.SpentLessThanForecasted)
+       });
+    }
 }

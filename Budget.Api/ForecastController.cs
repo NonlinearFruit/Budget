@@ -58,9 +58,14 @@ namespace Budget.Api
                 .Sum(t => t.Amount);
             return new ForecastTest()
             {
-                Forecast = forecast,
+                CategoryName = forecast.Category.Name,
+                CategoryColor = forecast.Category.Color,
+                Year = forecast.Year,
+                Month = forecast.Month,
+                ForecastedAmount = forecast.Amount,
                 SpentLessThanForecasted = sumOfTransactions <= forecast.Amount,
-                SpentAmount = sumOfTransactions
+                SpentAmount = sumOfTransactions,
+                Notes = forecast.Notes
             };
         }
 
