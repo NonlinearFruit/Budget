@@ -31,11 +31,10 @@ namespace Budget.Api
                 .BankAccounts
                 .Select(a => new BankAccountTest
                 {
-                    Account = a,
-                    LiveMatchesSum = _context
-                        .Transactions
-                        .Where(t => t.AccountId == a.Id)
-                        .Sum(t => t.Amount) == a.LiveTotal
+                    Name = a.Name,
+                    Color = a.Color,
+                    ExpectedTotal = a.LiveTotal,
+                    ActualTotal = a.Transactions.Sum(t => t.Amount)
                 })
                 .ToListAsync();
         }
@@ -64,8 +63,10 @@ namespace Budget.Api
             var sum = await _context.Transactions.Where(t => t.AccountId == id).SumAsync(t => t.Amount);
             return new BankAccountTest
             {
-                Account = bankAccount,
-                LiveMatchesSum = bankAccount.LiveTotal == sum
+                Name = bankAccount.Name,
+                Color = bankAccount.Color,
+                ExpectedTotal = bankAccount.LiveTotal,
+                ActualTotal = sum
             };
         }
 

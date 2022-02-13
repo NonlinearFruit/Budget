@@ -2,6 +2,8 @@ namespace Budget.Shared;
 
 public class BankAccountTest
 {
-    public BankAccount Account { get; set; }
-    public bool LiveMatchesSum { get; set; }
+    public string? Name { get; set; }
+    public string Color { get; set; }
+    public decimal ExpectedTotal { get; set; }
+    public decimal ActualTotal { get; set; }
 }

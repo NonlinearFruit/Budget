@@ -31,24 +31,27 @@ public class BankAccountControllerTests : DbContextTests
         public async Task includes_account()
         {
             var name = "Broken Cistern";
+            var color = "red";
+            var live = 301;
             var id = _arrangeContext.BankAccounts.Add(new BankAccount
             {
                 Name = name,
-                Color = ""
+                Color = color,
+                LiveTotal = live
             }).Entity.Id;
             await _arrangeContext.SaveChangesAsync();
 
             var response = await _controller.GetBankAccountTest(id);
 
-            Assert.Equal(name, response.Value?.Account.Name);
+            Assert.Equal(name, response.Value?.Name);
+            Assert.Equal(color, response.Value?.Color);
+            Assert.Equal(live, response.Value?.ExpectedTotal);
         }
 
         [Theory]
-        [InlineData(100, true, 100)]
-        [InlineData(100, false, 10)]
-        [InlineData(10, false, 100)]
-        [InlineData(100, true, 50, 50)]
-        public async Task live_matches_sum_works(int total, bool shouldMatch, params int[] transactionAmounts)
+        [InlineData(100, 100)]
+        [InlineData(100, 50, 50)]
+        public async Task actual_total_sums_transactions(int total, params int[] transactionAmounts)
         {
             var name = "Broken Cistern";
             var id = _arrangeContext.BankAccounts.Add(new BankAccount
@@ -67,7 +70,7 @@ public class BankAccountControllerTests : DbContextTests
 
             var response = await _controller.GetBankAccountTest(id);
 
-            Assert.Equal(shouldMatch, response.Value?.LiveMatchesSum);
+            Assert.Equal(total, response.Value?.ActualTotal);
         }
 
         [Fact]
@@ -88,7 +91,7 @@ public class BankAccountControllerTests : DbContextTests
 
             var response = await _controller.GetBankAccountTest(id);
 
-            Assert.False(response.Value?.LiveMatchesSum);
+            Assert.Equal(0, response.Value?.ActualTotal);
         }
     }
 
@@ -113,20 +116,23 @@ public class BankAccountControllerTests : DbContextTests
         public async Task includes_the_account()
         {
             var name = "Life Savings";
-            _arrangeContext.BankAccounts.Add(new BankAccount{Name = name, Color = ""});
+            var color = "blue";
+            var live = 103;
+            _arrangeContext.BankAccounts.Add(new BankAccount{Name = name, Color = color, LiveTotal = live});
             await _arrangeContext.SaveChangesAsync();
 
             var response = await _controller.GetBankAccountTests();
 
-            Assert.Equal(name, response.Value?.First().Account.Name);
+            var test = response.Value?.First();
+            Assert.Equal(name, test.Name);
+            Assert.Equal(color, test.Color);
+            Assert.Equal(live, test.ExpectedTotal);
         }
 
         [Theory]
-        [InlineData(100, true, 100)]
-        [InlineData(100, false, 10)]
-        [InlineData(10, false, 100)]
-        [InlineData(100, true, 50, 50)]
-        public async Task live_matches_sum_works(int total, bool shouldMatch, params int[] transactionAmounts)
+        [InlineData(100, 100)]
+        [InlineData(100, 50, 50)]
+        public async Task actual_total_sums_transactions(int total, params int[] transactionAmounts)
         {
             var name = "Broken Cistern";
             var id = _arrangeContext.BankAccounts.Add(new BankAccount
@@ -146,7 +152,7 @@ public class BankAccountControllerTests : DbContextTests
             var response = await _controller.GetBankAccountTests();
 
             var test = response.Value?.First();
-            Assert.Equal(shouldMatch, test?.LiveMatchesSum);
+            Assert.Equal(total, test?.ActualTotal);
         }
 
         [Fact]
@@ -168,7 +174,7 @@ public class BankAccountControllerTests : DbContextTests
             var response = await _controller.GetBankAccountTests();
 
             var test = response.Value?.First();
-            Assert.False(test?.LiveMatchesSum);
+            Assert.Equal(0, test?.ActualTotal);
         }
     }
 
