@@ -12,4 +12,14 @@ public static class ApiConstants
             return $"{TestPath}?year={time.Year}&month={time.Month}";
         }
     }
+
+    public static class BankAccount
+    {
+        public const string TestPath = $"{BasePath}/BankAccount/Test";
+
+        public static string GetTestsPath()
+        {
+            return TestPath;
+        }
+    }
 }

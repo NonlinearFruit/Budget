@@ -5,7 +5,7 @@ namespace Budget.Shared.Tests;
 
 public class ApiConstantsTests
 {
-    public class GetTestsPath : ApiConstantsTests
+    public class ForecastsGetTestsPath : ApiConstantsTests
     {
         [Fact]
         public void has_correct_endpoint()
@@ -22,6 +22,15 @@ public class ApiConstantsTests
             var endpoint = ApiConstants.Forecast.GetTestsPath(new DateTime(year, month, 1));
 
             Assert.EndsWith($"?year={year}&month={month}", endpoint);
+        }
+    }
+
+    public class BankAccountsGetTestsPath : ApiConstantsTests
+    {
+        [Fact]
+        public void has_correct_endpoint()
+        {
+            Assert.Equal("api/BankAccount/Test", ApiConstants.BankAccount.GetTestsPath());
         }
     }
 }

@@ -5,6 +5,32 @@
 
 <PageTitle>@Title</PageTitle>
 
+<h2>Bank Account Tests</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width: 10%">Status</th>
+            <th>Account</th>
+            <th>Expected</th>
+            <th>Actual</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var test in AccountTests)
+        {
+            <tr>
+                <td><span class="oi @(((test.ActualTotal == test.ExpectedTotal).ToIcon()))" aria-hidden="true"></span></td>
+                <td style="background-color: @test.Color">@test.Name</td>
+                <td style="background-color: @test.ExpectedTotal.ToColor()">@test.ExpectedTotal.ToCurrency()</td>
+                <td style="background-color: @test.ActualTotal.ToColor()">@test.ActualTotal.ToCurrency()</td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<br/>
+<br/>
+<h2>Forecast Tests</h2>
 <EditForm Model="@this" OnValidSubmit="@Reload">
     <DataAnnotationsValidator/>
     <ValidationSummary/>
@@ -44,9 +70,16 @@
 
     private DateTime Time { get; set; } = DateTime.Now;
     private IList<ForecastTest> ForecastTests { get; set; } = new List<ForecastTest>();
+    private IList<BankAccountTest> AccountTests { get; set; } = new List<BankAccountTest>();
+
+    protected override async Task OnInitializedAsync()
+    {
+        AccountTests = await Http.GetFromJsonAsync<IList<BankAccountTest>>(ApiConstants.BankAccount.GetTestsPath());
+    }
 
     private async Task Reload()
     {
+        AccountTests = await Http.GetFromJsonAsync<IList<BankAccountTest>>(ApiConstants.BankAccount.GetTestsPath());
         ForecastTests = await Http.GetFromJsonAsync<IList<ForecastTest>>(ApiConstants.Forecast.GetTestsPath(Time));
         await AddTotalForecast();
     }
