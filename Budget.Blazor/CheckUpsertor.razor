@@ -82,7 +82,7 @@ else
         Model.When = DateTime.SpecifyKind(Model.When, DateTimeKind.Utc);
         if (IsUpdate)
         {
-            await Http.PutAsJsonAsync($"Api/Check", Model);
+            await Http.PostAsJsonAsync($"Api/Check", Model);
             NavigationManager.NavigateTo(Constants.Check.CataloguePath);
         }
         else
