@@ -5,7 +5,7 @@ using TagClass = Budget.Shared.Tag;
 
 namespace Budget.Shared;
 
-public class Transaction
+public class Transaction : BaseEntity
 {
     [Key]
     public long Id { get; set; }
@@ -15,7 +15,6 @@ public class Transaction
     public long TagId { get; set; }
     public long AccountId { get; set; }
     public DateTime When { get; set; }
-    public DateTime Created { get; set; }
 
     [ForeignKey(nameof(CategoryId))]
     [InverseProperty(nameof(CategoryClass.Transactions))]

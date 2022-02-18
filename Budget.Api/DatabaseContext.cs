@@ -15,38 +15,47 @@ public class DatabaseContext : DbContext, IDatabaseContext
 
     protected override void OnModelCreating(ModelBuilder builder)
     {
-        builder
-            .Entity<BankAccount>()
-            .Property(p => p.Created)
-            .HasDefaultValueSql("now()");
-        builder
-            .Entity<Tag>()
-            .Property(p => p.Created)
-            .HasDefaultValueSql("now()");
-        builder
-            .Entity<Transaction>()
-            .Property(p => p.Created)
-            .HasDefaultValueSql("now()");
-        builder
-            .Entity<Forecast>()
-            .Property(p => p.Created)
-            .HasDefaultValueSql("now()");
-        builder
-            .Entity<Category>()
-            .Property(p => p.Created)
-            .HasDefaultValueSql("now()");
-        builder
-            .Entity<Check>()
-            .Property(p => p.Created)
-            .HasDefaultValueSql("now()");
+        var entityTypes = new []
+        {
+            typeof(BankAccount),
+            typeof(Category),
+            typeof(Check),
+            typeof(Forecast),
+            typeof(Tag),
+            typeof(Transaction)
+        };
+        foreach(var type in entityTypes)
+            builder
+                .Entity(type)
+                .Property<DateTime>(nameof(BaseEntity.Created))
+                .HasDefaultValueSql("now()");
+    }
+
+    Task<int> IDatabaseContext.SaveChangesAsync()
+    {
+        var now = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
+
+        foreach (var entry in ChangeTracker.Entries())
+        {
+            if (entry.Entity is BaseEntity entity)
+                switch (entry.State)
+                {
+                    case EntityState.Added:
+                    case EntityState.Modified:
+                        entity.Modified = now;
+                        break;
+                }
+        }
+
+        return base.SaveChangesAsync();
     }
 
     public DbSet<BankAccount> BankAccounts { get; set; }
-    public DbSet<Tag> Tags { get; set; }
-    public DbSet<Transaction> Transactions { get; set; }
-    public DbSet<Forecast> Forecasts { get; set; }
     public DbSet<Category> Categories { get; set; }
     public DbSet<Check> Checks { get; set; }
+    public DbSet<Forecast> Forecasts { get; set; }
+    public DbSet<Tag> Tags { get; set; }
+    public DbSet<Transaction> Transactions { get; set; }
 
     public void Migrate()
     {

@@ -13,6 +13,6 @@ public interface IDatabaseContext
     DbSet<Category> Categories { get; set; }
     DbSet<Check> Checks { get; set; }
     EntityEntry<TEntity> Entry<TEntity>(TEntity entity) where TEntity : class;
-    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task<int> SaveChangesAsync();
     void Migrate();
 }

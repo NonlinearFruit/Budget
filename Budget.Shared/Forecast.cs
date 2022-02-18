@@ -4,7 +4,7 @@ using CategoryClass = Budget.Shared.Category;
 
 namespace Budget.Shared;
 
-public class Forecast
+public class Forecast : BaseEntity
 {
     [Key]
     public long Id { get; set; }
@@ -12,7 +12,6 @@ public class Forecast
     public string? Notes { get; set; }
     public int Month { get; set; }
     public int Year { get; set; }
-    public DateTime Created { get; set; }
     public long CategoryId { get; set; }
 
     [ForeignKey(nameof(CategoryId))]

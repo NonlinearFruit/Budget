@@ -3,13 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Budget.Shared;
 
-public class Category
+public class Category : BaseEntity
 {
     [Key]
     public long Id { get; set; }
     public string? Name { get; set; }
     public string Color { get; set; }
-    public DateTime Created { get; set; }
 
     [InverseProperty(nameof(Forecast.Category))]
     public virtual ICollection<Forecast> Forecasts { get; set; } = new List<Forecast>();

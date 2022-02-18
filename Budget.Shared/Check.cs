@@ -2,7 +2,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Budget.Shared;
 
-public class Check
+public class Check : BaseEntity
 {
     [Key]
     public long Id { get; set; }
@@ -12,5 +12,4 @@ public class Check
     public decimal Amount { get; set; }
     public bool Withdrawn { get; set; }
     public DateTime When { get; set; }
-    public DateTime Created { get; set; }
 }
