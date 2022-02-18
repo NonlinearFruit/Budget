@@ -77,7 +77,6 @@ namespace Budget.Api
                 Year = forecast.Year,
                 Month = forecast.Month,
                 ForecastedAmount = forecast.Amount,
-                SpentLessThanForecasted = sumOfTransactions <= forecast.Amount,
                 SpentAmount = sumOfTransactions,
                 Notes = forecast.Notes
             };

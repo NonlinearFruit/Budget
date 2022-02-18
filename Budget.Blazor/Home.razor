@@ -44,6 +44,30 @@
 <table class="table">
     <thead>
         <tr>
+            <th style="width: 10%">Status</th>
+            <th>Test</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td><span class="oi @(((TotalTest.ForecastedAmount > 0).ToIcon()))" aria-hidden="true"></span></td>
+            <td>Expecting extra money: @TotalTest.ForecastedAmount.ToCurrency()</td>
+        </tr>
+        <tr>
+            <td><span class="oi @(((TotalTest.SpentAmount > 0).ToIcon()))" aria-hidden="true"></span></td>
+            <td>Have extra money: @TotalTest.SpentAmount.ToCurrency()</td>
+        </tr>
+        <tr>
+            <td><span class="oi @(((TotalTest.SpentAmount > TotalTest.ForecastedAmount).ToIcon()))" aria-hidden="true"></span></td>
+            <td>Have more extra money than expected</td>
+        </tr>
+    </tbody>
+</table>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th style="width: 10%">Status</th>
             <th>Category</th>
             <th>Expected</th>
             <th>Actual</th>
@@ -54,6 +78,7 @@
         @foreach (var test in ForecastTests)
         {
             <tr>
+                <td><span class="oi @SpentLessThanForecasted(test).ToIcon()" aria-hidden="true"></span></td>
                 <td style="background-color: @test.CategoryColor">@test.CategoryName</td>
                 <td style="background-color: @test.ForecastedAmount.ToColor()">@test.ForecastedAmount.ToCurrency()</td>
                 <td style="background-color: @test.SpentAmount.ToColor()">@test.SpentAmount.ToCurrency()</td>
@@ -69,6 +94,7 @@
     public string Icon => "oi-home";
 
     private DateTime Time { get; set; } = DateTime.Now;
+    private ForecastTest TotalTest { get; set; } = new ();
     private IList<ForecastTest> ForecastTests { get; set; } = new List<ForecastTest>();
     private IList<BankAccountTest> AccountTests { get; set; } = new List<BankAccountTest>();
 
@@ -84,15 +110,20 @@
         await AddTotalForecast();
     }
 
+    private bool SpentLessThanForecasted(ForecastTest test)
+    {
+        return test.SpentAmount >= test.ForecastedAmount;
+    }
+
     private async Task AddTotalForecast()
     {
-       ForecastTests.Add(new ForecastTest
-       {
-           CategoryName = "Total",
-           CategoryColor = "#FFFFFF",
-           ForecastedAmount = ForecastTests.Sum(t => t.ForecastedAmount),
-           SpentAmount = ForecastTests.Sum(t => t.SpentAmount),
-           SpentLessThanForecasted = ForecastTests.All(t => t.SpentLessThanForecasted)
-       });
+        TotalTest = new ForecastTest
+        {
+            CategoryName = "Total",
+            CategoryColor = "#FFFFFF",
+            ForecastedAmount = ForecastTests.Sum(t => t.ForecastedAmount),
+            SpentAmount = ForecastTests.Sum(t => t.SpentAmount),
+        };
+       ForecastTests.Add(TotalTest);
     }
 }
