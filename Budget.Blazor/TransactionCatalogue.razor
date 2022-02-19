@@ -7,6 +7,8 @@
 
 <h3>All Transactions</h3>
 
+<button class="btn btn-success" onclick="@Refresh">Refresh</button>
+
 <TransactionCatalogueElement Transactions="@Transactions"/>
 
 
@@ -17,6 +19,11 @@
     public IList<Transaction> Transactions { get; set; }
 
     protected override async Task OnInitializedAsync()
+    {
+        await Refresh();
+    }
+
+    private async Task Refresh()
     {
         Transactions = await Http.GetFromJsonAsync<IList<Transaction>>(Constants.Api.GetTransactions());
     }
