@@ -19,7 +19,7 @@ namespace Budget.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Check>>> GetChecks()
         {
-            return await _context.Checks.ToListAsync();
+            return await _context.Checks.OrderBy(c => c.CheckNumber).ToListAsync();
         }
 
         // GET: api/Check/5
