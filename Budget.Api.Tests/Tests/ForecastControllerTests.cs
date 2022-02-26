@@ -340,4 +340,72 @@ public class ForecastControllerTests : DbContextTests
             _arrangeContext.SaveChanges();
         }
     }
+
+    public class CloneForecasts : ForecastControllerTests
+    {
+        [Fact]
+        public void does_not_create_forecast_from_nothing()
+        {
+            var from = new DateOnly(2022, 02, 01);
+            var to = new DateOnly(2022, 03, 01);
+
+            Clone(from, to);
+
+            Assert.Empty(_assertContext.Forecasts);
+        }
+
+        [Fact]
+        public void creates_forecast_clone_for_each_match()
+        {
+            var from = new DateOnly(2022, 02, 01);
+            var to = new DateOnly(2023, 03, 01);
+            _arrangeContext.Forecasts.Add(ArrangeForecast(from));
+            _arrangeContext.SaveChanges();
+
+            Clone(from, to);
+
+            Assert.Equal(2, _assertContext.Forecasts.Count());
+            Assert.Single(_assertContext.Forecasts.Where(f => f.Year == to.Year && f.Month == to.Month));
+        }
+
+        [Fact]
+        public void does_not_clone_forecasts_in_wrong_month()
+        {
+            var from = new DateOnly(2022, 02, 01);
+            var to = new DateOnly(2023, 03, 01);
+            _arrangeContext.Forecasts.Add(ArrangeForecast(from.AddMonths(1)));
+            _arrangeContext.SaveChanges();
+
+            Clone(from, to);
+
+            Assert.Empty(_assertContext.Forecasts.Where(f => f.Year == to.Year && f.Month == to.Month));
+        }
+
+        [Fact]
+        public void does_not_clone_forecasts_in_wrong_year()
+        {
+            var from = new DateOnly(2022, 02, 01);
+            var to = new DateOnly(2023, 03, 01);
+            _arrangeContext.Forecasts.Add(ArrangeForecast(from.AddYears(1)));
+            _arrangeContext.SaveChanges();
+
+            Clone(from, to);
+
+            Assert.Empty(_assertContext.Forecasts.Where(f => f.Year == to.Year && f.Month == to.Month));
+        }
+
+        private void Clone(DateOnly from, DateOnly to)
+        {
+            _controller.CloneForecasts(from.Year, from.Month, to.Year, to.Month);
+        }
+
+        private static Forecast ArrangeForecast(DateOnly date)
+        {
+            return new Forecast
+            {
+                Year = date.Year,
+                Month = date.Month
+            };
+        }
+    }
 }

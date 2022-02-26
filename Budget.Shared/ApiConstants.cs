@@ -11,6 +11,11 @@ public static class ApiConstants
         {
             return $"{TestPath}?year={time.Year}&month={time.Month}";
         }
+
+        public static string GetClonePath(DateTime from, DateTime to)
+        {
+            return $"{BasePath}/Forecast/Clone/{from.Year}/{from.Month}/To/{to.Year}/{to.Month}";
+        }
     }
 
     public static class BankAccount

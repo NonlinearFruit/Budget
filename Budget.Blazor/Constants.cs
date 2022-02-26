@@ -27,6 +27,7 @@ public static class Constants
     public static class Forecast
     {
         public const string CataloguePath = "/Forecasts";
+        public const string ClonePath = "/Forecasts/Clone";
         public const string UpsertPath = "/UpsertForecast/{Id:long?}";
         public const string ViewerPath = "/Forecast/{Id:long}";
         public static string GetUpsertPath(long? id = null) => $"/UpsertForecast/{id?.ToString() ?? ""}";

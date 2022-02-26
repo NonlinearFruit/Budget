@@ -140,6 +140,25 @@ namespace Budget.Api
             return NoContent();
         }
 
+        [HttpPost("Clone/{fromYear}/{fromMonth}/To/{toYear}/{toMonth}")]
+        public async Task CloneForecasts(int fromYear, int fromMonth, int toYear, int toMonth)
+        {
+            _context
+                .Forecasts
+                .Where(f => f.Month == fromMonth)
+                .Where(f => f.Year == fromYear)
+                .ToList()
+                .ForEach(f => _context.Forecasts.Add(new Forecast
+                {
+                    Year = toYear,
+                    Month = toMonth,
+                    CategoryId = f.CategoryId,
+                    Amount = f.Amount,
+                    Notes = f.Notes
+                }));
+            await _context.SaveChangesAsync();
+        }
+
         private bool ForecastExists(long id)
         {
             return _context.Forecasts.Any(e => e.Id == id);

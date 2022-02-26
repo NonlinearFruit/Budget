@@ -1,0 +1,44 @@
+@attribute [Route(Constants.Forecast.ClonePath)]
+@using Microsoft.AspNetCore.Components
+@using Budget.Shared
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+<h3>Clone Forecasts</h3>
+
+<div class="row">
+    <EditForm Model="@this" OnValidSubmit="@Clone">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            From: <InputMonth @bind-Value="From" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            To: <InputMonth @bind-Value="To" class="form-control" />
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-success">Clone</button>
+    </EditForm>
+</div>
+<br />
+<br />
+<a href="@Constants.Forecast.CataloguePath">Back to List</a>
+
+
+@code {
+
+    public DateTime From { get; set; } = DateTime.Now;
+    public DateTime To { get; set; } = DateTime.Now.AddMonths(1);
+
+    private async Task Clone()
+    {
+        var request = new HttpRequestMessage(HttpMethod.Post, ApiConstants.Forecast.GetClonePath(From, To));
+        await Http.SendAsync(request);
+        NavigationManager.NavigateTo(Constants.Forecast.CataloguePath);
+    }
+}
