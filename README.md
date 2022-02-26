@@ -7,10 +7,16 @@
 | `http://localhost:7162` | Base url for api       |
 | `http://localhost:7098` | Base url for web app   |
 
-## Helpful Filler Commands
+## How to Setup Budget for Use
 
- - Check all forecast amounts vs spent amounts
-   - `curl https://localhost:7162/api/Forecast -ks | jq .[].id | xargs -I _ curl https://localhost:7162/api/Forecast/_/Test -ks | jq '{name: .forecast.category.name, forecast: .forecast.amount, spent: .spentAmount, spentIsLess: .spentLessThan$orecasted}'`
+- Install [pgAdmin][pgAdmin] for creating/hosting your postgres database
+- Create a database via pgAdmin
+- Install [.Net 6+ SDK][.net]
+- Clone our repo
+- Edit the appsettings' ConnectionString to point to your database
+- `dotnet run --project Budget.Api/Budget.Api.csproj` to start the [Api][swag]
+- `dotnet run --project Budget.Blazor/Budget.Blazor.csproj` to start the [Web App](http://localhost:7098)
+- Budget!
 
 ## How to Backup
 
@@ -21,4 +27,6 @@
  5. Format: 'Plain'
  6. Click 'Backup'
 
+[.net]: https://dotnet.microsoft.com/en-us/download/dotnet/6.0
+[pgAdmin]: https://www.pgadmin.org
 [swag]: https://localhost:7162/swagger/index.html
