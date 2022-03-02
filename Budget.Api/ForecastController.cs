@@ -19,7 +19,12 @@ namespace Budget.Api
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Forecast>>> GetForecasts()
         {
-            return await _context.Forecasts.ToListAsync();
+            return await _context
+                .Forecasts
+                .OrderByDescending(f => f.Year)
+                .ThenByDescending(f => f.Month)
+                .ThenBy(f => f.Category.Name)
+                .ToListAsync();
         }
 
         [HttpGet("Test")]

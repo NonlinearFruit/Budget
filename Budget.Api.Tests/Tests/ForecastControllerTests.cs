@@ -19,6 +19,62 @@ public class ForecastControllerTests : DbContextTests
         _controller = new ForecastController(_actContext);
     }
 
+    public class GetForecasts : ForecastControllerTests
+    {
+        [Fact]
+        public async Task orders_by_year()
+        {
+            var noteIdentifier = "I'm the best";
+            ArrangeForecast(year: DateTime.Now.AddYears(-1).Year);
+            ArrangeForecast(year: DateTime.Now.Year, note: noteIdentifier);
+            _arrangeContext.SaveChanges();
+
+            var result = await _controller.GetForecasts();
+
+            var first = result.Value.First();
+            Assert.Equal(noteIdentifier, first.Notes);
+        }
+
+        [Fact]
+        public async Task orders_by_month()
+        {
+            var noteIdentifier = "I'm the best";
+            ArrangeForecast(month: DateTime.Now.AddMonths(-1).Month);
+            ArrangeForecast(month: DateTime.Now.Month, note: noteIdentifier);
+            _arrangeContext.SaveChanges();
+
+            var result = await _controller.GetForecasts();
+
+            var first = result.Value.First();
+            Assert.Equal(noteIdentifier, first.Notes);
+        }
+
+        [Fact]
+        public async Task orders_by_name()
+        {
+            var noteIdentifier = "I'm the best";
+            ArrangeForecast(name: "B");
+            ArrangeForecast(name: "A", note: noteIdentifier);
+            _arrangeContext.SaveChanges();
+
+            var result = await _controller.GetForecasts();
+
+            var first = result.Value.First();
+            Assert.Equal(noteIdentifier, first.Notes);
+        }
+
+        private void ArrangeForecast(int year = 2022, int month = 3, string name = "Utilities", string note = "Notes")
+        {
+            _arrangeContext.Forecasts.Add(new Forecast
+            {
+                Year = year,
+                Month = month,
+                Notes = note,
+                Category = new Category{Name = name, Color = ""}
+            });
+        }
+    }
+
     public class GetForecastTest : ForecastControllerTests
     {
         [Fact]
