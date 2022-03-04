@@ -1,5 +1,6 @@
 # Budget
-[![GitHub Workflow Status](https://img.shields.io/github/workflow/status/NonlinearFruit/Budget/.NET%20Core)](https://github.com/NonlinearFruit/Budget/actions/workflows/dotnet-core.yml)
+[![GitHub Build/Test Workflow Status](https://img.shields.io/github/workflow/status/NonlinearFruit/Budget/build-and-unit-test?label=tests)](https://github.com/NonlinearFruit/Budget/actions/workflows/build-test.yml)
+[![GitHub Dependency Workflow Status](https://img.shields.io/github/workflow/status/NonlinearFruit/Budget/any-outdated-dependencies?label=dependencies)](https://github.com/NonlinearFruit/Budget/actions/workflows/dependencies.yml)
 
 | Resource                | Description            |
 |-------------------------|------------------------|
