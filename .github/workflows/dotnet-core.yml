@@ -34,7 +34,7 @@ jobs:
     - name: Test
       run: dotnet test --logger:"console;verbosity=normal"
 
-  Updated Dependencies:
+  Updated_Dependencies:
     needs: Test
     runs-on: ubuntu-latest
     steps:
