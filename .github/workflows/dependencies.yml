@@ -4,7 +4,6 @@ on: push
 
 jobs:
   Outdated_Dependencies:
-    needs: Test
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
