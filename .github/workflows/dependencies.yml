@@ -2,6 +2,7 @@ name: Any Outdated Dependencies?
 
 on: push
 
+jobs:
   Outdated_Dependencies:
     needs: Test
     runs-on: ubuntu-latest
