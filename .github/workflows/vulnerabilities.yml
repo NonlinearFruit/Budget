@@ -17,5 +17,5 @@ jobs:
       run: dotnet restore
     - name: Install outdated
       run: dotnet tool install --global security-scan
-    - name: Check for out of date dependencies
+    - name: Check for source code vulnerabilities
       run: security-scan *.sln
