@@ -1,0 +1,21 @@
+name: vulnerabilities
+
+on: push
+
+jobs:
+  Vulnerabilities:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: 6.0.100
+    - name: Clean
+      run: dotnet clean --configuration Release && dotnet nuget locals all --clear
+    - name: Install dependencies
+      run: dotnet restore
+    - name: Install outdated
+      run: dotnet tool install --global security-scan
+    - name: Check for out of date dependencies
+      run: security-scan *.sln

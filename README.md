@@ -1,6 +1,7 @@
 # Budget
 [![GitHub Build/Test Workflow Status](https://img.shields.io/github/workflow/status/NonlinearFruit/Budget/build-and-unit-test?label=tests)](https://github.com/NonlinearFruit/Budget/actions/workflows/build-test.yml)
-[![GitHub Dependency Workflow Status](https://img.shields.io/github/workflow/status/NonlinearFruit/Budget/any-outdated-dependencies?label=dependencies)](https://github.com/NonlinearFruit/Budget/actions/workflows/dependencies.yml)
+[![GitHub Up-to-date Workflow Status](https://img.shields.io/github/workflow/status/NonlinearFruit/Budget/any-outdated-dependencies?label=up-to-date)](https://github.com/NonlinearFruit/Budget/actions/workflows/up-to-date.yml)
+[![GitHub Vulnerabilities Workflow Status](https://img.shields.io/github/workflow/status/NonlinearFruit/Budget/vulnerabilities?label=vulnerabilities)](https://github.com/NonlinearFruit/Budget/actions/workflows/vulnerabilities.yml)
 
 | Resource                | Description            |
 |-------------------------|------------------------|
