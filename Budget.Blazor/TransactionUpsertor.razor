@@ -75,6 +75,7 @@ else
     public long? Id { get; set; }
 
     private bool IsUpdate => Id == null;
+    private bool ButtonHasBeenClicked { get; set; } = false;
     private IList<Category> Categories { get; set; } = new List<Category>();
     private IList<BankAccount> Accounts { get; set; } = new List<BankAccount>();
     private IList<Tag> Tags { get; set; } = new List<Tag>();
@@ -99,6 +100,8 @@ else
 
     private async Task Upsert()
     {
+        if (ButtonHasBeenClicked) return;
+        ButtonHasBeenClicked = true;
         Transaction.When = DateTime.SpecifyKind(Transaction.When, DateTimeKind.Utc);
         if (IsUpdate)
         {
