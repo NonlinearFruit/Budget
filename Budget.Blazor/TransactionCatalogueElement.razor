@@ -52,7 +52,7 @@ else
         if (confirm)
         {
             await Http.DeleteAsync($"Api/Transaction/{id}");
-            NavigationManager.NavigateTo(Constants.Transaction.CataloguePath);
+            NavigationManager.NavigateTo(Constants.Transaction.CataloguePath, true);
         }
     }
 }
