@@ -3,6 +3,15 @@ namespace Budget.Shared;
 public static class ApiConstants
 {
     private const string BasePath = "api";
+
+    public static class BuiltIn
+    {
+        public static string GetOpenApiSpec()
+        {
+            return "swagger/v1/swagger.json";
+        }
+    }
+
     public static class Forecast
     {
         public const string TestPath = $"{BasePath}/Forecast/Test";
