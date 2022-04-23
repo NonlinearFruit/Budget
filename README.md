@@ -29,6 +29,12 @@
  5. Format: 'Plain'
  6. Click 'Backup'
 
+ OR
+
+ ```
+ C:\Users\<user>\AppData\Local\Programs\pgAdmin 4\v6\runtime\pg_dump.exe --file "C:\\<path to backups>\\BUDGET~3.BAC" --host "localhost" --port "5432" --username "postgres" --no-password --verbose --format=p "Budget"
+ ```
+
 [.net]: https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 [pgAdmin]: https://www.pgadmin.org
 [swag]: https://localhost:7162/swagger/index.html
