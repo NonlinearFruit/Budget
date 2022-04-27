@@ -6,7 +6,12 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
-builder.Services.AddScoped(_ => new HttpClient { BaseAddress = new Uri("https://localhost:7162") });
+var baseApiUrl = builder.HostEnvironment.BaseAddress;
+var uriBuilder = new UriBuilder(baseApiUrl)
+{
+    Port = 7164
+};
+builder.Services.AddScoped(_ => new HttpClient { BaseAddress = uriBuilder.Uri });
 builder.Services.AddTransient<INavigationItem, BankAccountCatalogue>();
 builder.Services.AddTransient<INavigationItem, CategoryCatalogue>();
 builder.Services.AddTransient<INavigationItem, CheckCatalogue>();
