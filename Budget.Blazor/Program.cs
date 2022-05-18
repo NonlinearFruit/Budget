@@ -9,7 +9,7 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 var baseApiUrl = builder.HostEnvironment.BaseAddress;
 var uriBuilder = new UriBuilder(baseApiUrl)
 {
-    Port = 7164
+    Port = 7162
 };
 builder.Services.AddScoped(_ => new HttpClient { BaseAddress = uriBuilder.Uri });
 builder.Services.AddTransient<INavigationItem, BankAccountCatalogue>();

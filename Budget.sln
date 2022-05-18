@@ -7,6 +7,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Misc", "Misc", "{9C1D76DE-1
 ProjectSection(SolutionItems) = preProject
 	.gitignore = .gitignore
 	README.md = README.md
+	.github\workflows\build-test.yml = .github\workflows\build-test.yml
+	.github\workflows\up-to-date.yml = .github\workflows\up-to-date.yml
+	.github\workflows\vulnerabilities.yml = .github\workflows\vulnerabilities.yml
 EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Budget.Blazor", "Budget.Blazor\Budget.Blazor.csproj", "{EF400F75-9E95-467B-90B8-93B8B502DAD4}"
