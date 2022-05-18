@@ -44,6 +44,7 @@ namespace Budget.Api
                     SpentAmount = f.Category.Transactions.Where(t => t.When.Year == f.Year).Where(t => t.When.Month == f.Month).Sum(t => t.Amount),
                     Notes = f.Notes
                 })
+                .OrderBy(t => t.CategoryName)
                 .ToListAsync();
         }
 

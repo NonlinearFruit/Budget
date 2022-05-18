@@ -235,6 +235,22 @@ public class ForecastControllerTests : DbContextTests
 
             Assert.Equal(countOfForecasts, response.Count());
         }
+        
+        [Fact]
+        public async Task orders_tests_by_category()
+        {
+            var first = "A";
+            var second = "B";
+            var firstCategory = _arrangeContext.Categories.Add(new() {Name = first, Color = ""}).Entity.Id;
+            var secondCategory = _arrangeContext.Categories.Add(new() {Name = second, Color = ""}).Entity.Id;
+            _arrangeContext.SaveChanges();
+            ArrangeForecast(category:secondCategory);
+            ArrangeForecast(category:firstCategory);
+
+            var response = GetForecastTestsViaController();
+
+            Assert.Equal(first, response.First().CategoryName);
+        }
 
         [Fact]
         public async Task includes_forecast()
