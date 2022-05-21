@@ -1,7 +1,6 @@
 using Budget.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using NuGet.Protocol;
 
 namespace Budget.Api
 {

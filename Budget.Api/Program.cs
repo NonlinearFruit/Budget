@@ -1,12 +1,14 @@
-using System.Runtime.CompilerServices;
-using Budget.Api;
-using Microsoft.AspNetCore.Builder;
+namespace Budget.Api;
 
-[assembly:InternalsVisibleTo("Budget.Tests")]
-
-var builder = WebApplication.CreateBuilder(args);
-var startup = new Startup();
-startup.ConfigureServices(builder.Services);
-using var app = builder.Build();
-startup.Configure(app);
-app.Run();
+public class Program
+{
+    public static void Main(string[] args)
+    {
+        var builder = WebApplication.CreateBuilder(args);
+        var startup = new Startup();
+        startup.ConfigureServices(builder.Services);
+        using var app = builder.Build();
+        startup.Configure(app);
+        app.Run();
+    }
+}

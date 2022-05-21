@@ -41,6 +41,16 @@
  psql.exe Budget postgres < Budget.22.03.14.backup
  ```
 
+## How to setup Playwright integration tests
+
+- [Prerequisite] Install dotnet sdk
+- [Prerequisite] Install dotnet pwsh: dotnet tool install -g PowerShell
+- Do a build: dotnet restore && dotnet build
+- Install playwright browsers: pwsh.exe Budget.Tests/bin/Debug/net6.0/playwright.ps1 install
+    - Getting started guide: https://playwright.dev/dotnet/docs/intro#installation
+- Setup the settings.json and secrets.json for what is being tested
+- Run tests: dotnet test 
+
 [.net]: https://dotnet.microsoft.com/en-us/download/dotnet/6.0
 [pgAdmin]: https://www.pgadmin.org
 [swag]: https://localhost:7162/swagger/index.html

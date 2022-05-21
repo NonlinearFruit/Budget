@@ -2,7 +2,6 @@ using System;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Budget.Shared;
-using Newtonsoft.Json;
 using Xunit;
 
 namespace Budget.Tests;
