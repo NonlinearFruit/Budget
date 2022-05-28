@@ -13,6 +13,7 @@
             <th>Account</th>
             <th>Expected</th>
             <th>Actual</th>
+            <th>Difference</th>
         </tr>
     </thead>
     <tbody>
@@ -23,6 +24,15 @@
                 <td style="background-color: @test.Color">@test.Name</td>
                 <td style="background-color: @test.ExpectedTotal.ToColor()">@test.ExpectedTotal.ToCurrency()</td>
                 <td style="background-color: @test.ActualTotal.ToColor()">@test.ActualTotal.ToCurrency()</td>
+                @if (test.ActualTotal == test.ExpectedTotal)
+                {
+                    <td/>
+                }
+                else
+                {
+                    var difference = test.ActualTotal - test.ExpectedTotal;
+                    <td style="background-color: @difference.ToColor()">@difference.ToCurrency()</td>
+                }
             </tr>
         }
     </tbody>
@@ -51,16 +61,17 @@
     <tbody>
         <tr>
             <td><span class="oi @(((TotalTest.ForecastedAmount > 0).ToIcon()))" aria-hidden="true"></span></td>
-            <td>Expecting extra money: @TotalTest.ForecastedAmount.ToCurrency()</td>
+            <td>Expected Total is positive: @TotalTest.ForecastedAmount.ToCurrency()</td>
         </tr>
         <tr>
             <td><span class="oi @(((TotalTest.SpentAmount > 0).ToIcon()))" aria-hidden="true"></span></td>
-            <td>Have extra money: @TotalTest.SpentAmount.ToCurrency()</td>
+            <td>Actual Total is positive: @TotalTest.SpentAmount.ToCurrency()</td>
         </tr>
-        <tr>
-            <td><span class="oi @(((TotalTest.SpentAmount > TotalTest.ForecastedAmount).ToIcon()))" aria-hidden="true"></span></td>
-            <td>Have more extra money than expected</td>
-        </tr>
+    <tr>
+        @{ var leftoversTotal = TotalTest.SpentAmount - TotalTest.ForecastedAmount; }
+        <td><span class="oi @(((leftoversTotal > 0).ToIcon()))" aria-hidden="true"></span></td>
+        <td>Leftovers is positive: @leftoversTotal.ToCurrency()</td>
+    </tr>
     </tbody>
 </table>
 
@@ -71,17 +82,20 @@
             <th>Category</th>
             <th>Expected</th>
             <th>Actual</th>
+            <th>Leftovers</th>
             <th>Notes</th>
         </tr>
     </thead>
     <tbody>
         @foreach (var test in ForecastTests)
         {
+            var leftovers = test.SpentAmount - test.ForecastedAmount;
             <tr>
                 <td><span class="oi @SpentLessThanForecasted(test).ToIcon()" aria-hidden="true"></span></td>
                 <td style="background-color: @test.CategoryColor">@test.CategoryName</td>
                 <td style="background-color: @test.ForecastedAmount.ToColor()">@test.ForecastedAmount.ToCurrency()</td>
                 <td style="background-color: @test.SpentAmount.ToColor()">@test.SpentAmount.ToCurrency()</td>
+                <td style="background-color: @leftovers.ToColor()">@leftovers.ToCurrency()</td>
                 <td>@test.Notes</td>
             </tr>
         }
