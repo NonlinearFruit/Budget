@@ -67,11 +67,11 @@
             <td><span class="oi @(((TotalTest.SpentAmount > 0).ToIcon()))" aria-hidden="true"></span></td>
             <td>Actual Total is positive: @TotalTest.SpentAmount.ToCurrency()</td>
         </tr>
-    <tr>
-        @{ var leftoversTotal = TotalTest.SpentAmount - TotalTest.ForecastedAmount; }
-        <td><span class="oi @(((leftoversTotal > 0).ToIcon()))" aria-hidden="true"></span></td>
-        <td>Leftovers is positive: @leftoversTotal.ToCurrency()</td>
-    </tr>
+        <tr>
+            @{ var leftoversTotal = TotalTest.SpentAmount - TotalTest.ForecastedAmount; }
+            <td> <span class="oi @(((leftoversTotal > 0).ToIcon()))" aria-hidden="true"></span> </td>
+            <td>Leftovers Total is positive: @leftoversTotal.ToCurrency()</td>
+        </tr>
     </tbody>
 </table>
 
