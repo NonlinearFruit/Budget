@@ -30,8 +30,8 @@ else
                 <tr>
                     <td>@forecast.Year</td>
                     <td>@CultureInfo.CurrentCulture.DateTimeFormat.GetMonthName(forecast.Month)</td>
-                    <td style="background-color: @forecast.Category.Color">@forecast.Category.Name</td>
-                    <td style="background-color: @forecast.Amount.ToColor()"><a href="@Constants.Forecast.GetViewerPath(forecast.Id)">@forecast.Amount.ToCurrency()</a></td>
+                    <ViewLinkedTableCell Object="@forecast"/>
+                    <td style="background-color: @forecast.Amount.ToColor()">@forecast.Amount.ToCurrency()</td>
                     <td>@forecast.Notes</td>
                     <td><a href="@Constants.Forecast.GetUpsertPath(forecast.Id)" class="btn btn-info">Edit</a></td>
                     <td><a @onclick="(() => Delete(forecast.Id))" class="btn btn-danger">Delete</a></td>

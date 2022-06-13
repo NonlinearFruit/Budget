@@ -28,7 +28,7 @@ else
             @foreach (var check in Checks)
             {
                 <tr>
-                    <td><a href="@Constants.Check.GetViewerPath(check.Id)"> @check.CheckNumber</a></td>
+                    <ViewLinkedTableCell Object="@check"/>
                     <td>@check.When.ToShortDateString()</td>
                     <td>$@check.Amount</td>
                     <td>@check.Recipient</td>

@@ -23,7 +23,7 @@ else
             @foreach (var tag in Tags)
             {
                 <tr>
-                    <td style="background-color: @tag.Color"><a href="@Constants.Tag.GetViewerPath(tag.Id)"> @tag.Name</a></td>
+                    <ViewLinkedTableCell Object="@tag"/>
                     <td><a href="@Constants.Tag.GetEditorPath(tag.Id)" class="btn btn-info">Edit</a></td>
                     <td><a @onclick="(() => DeleteAccount(tag.Id))" class="btn btn-danger">Delete</a></td>
                 </tr>

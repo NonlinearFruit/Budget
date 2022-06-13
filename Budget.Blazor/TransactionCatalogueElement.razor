@@ -24,10 +24,10 @@ else
             @foreach (var transaction in Transactions)
             {
                 <tr>
-                    <td style="background-color: @transaction.Account.Color">@transaction.Account.Name</td>
-                    <td style="background-color: @transaction.Category.Color">@transaction.Category.Name</td>
-                    <td style="background-color: @transaction.Tag.Color">@transaction.Tag.Name</td>
-                    <td style="background-color: @transaction.Amount.ToColor()"><a href="@Constants.Transaction.GetViewerPath(transaction.Id)">@transaction.Amount.ToCurrency()</a></td>
+                    <ViewLinkedTableCell Object="@transaction.Account"/>
+                    <ViewLinkedTableCell Object="@transaction.Category"/>
+                    <ViewLinkedTableCell Object="@transaction.Tag"/>
+                    <ViewLinkedTableCell Object="@transaction"/>
                     <td>@transaction.When.ToShortDateString()</td>
                     <td>@transaction.Description</td>
                     <td><a href="@Constants.Transaction.GetUpsertPath(transaction.Id)" class="btn btn-info">Edit</a></td>

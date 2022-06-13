@@ -24,7 +24,7 @@ else
             @foreach (var account in Accounts)
             {
                 <tr>
-                    <td style="background-color: @account.Color"><a href="@Constants.BankAccount.GetViewerPath(account.Id)">@account.Name</a></td>
+                    <ViewLinkedTableCell Object="@account"/>
                     <td>$@account.LiveTotal</td>
                     <td><a href="@Constants.BankAccount.GetEditorPath(account.Id)" class="btn btn-info">Edit</a></td>
                     <td><a @onclick="(() => DeleteAccount(account.Id))" class="btn btn-danger">Delete</a></td>

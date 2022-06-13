@@ -1,0 +1,36 @@
+@using Budget.Shared
+@using System.ComponentModel
+
+@GetLink()
+
+<style>
+a,
+a:link,
+a:visited,
+a:hover,
+a:active {
+    color: inherit;
+    text-decoration: inherit;
+    font-weight: inherit;
+}
+</style>
+
+@code {
+
+    [Parameter]
+    public BaseEntity Object { get; set; }
+
+    private RenderFragment GetLink()
+    {
+        var (display, color, link) = Object switch{
+            BankAccount account => (account.Name, account.Color, Constants.BankAccount.GetViewerPath(account.Id)),
+            Category category => (category.Name, category.Color, Constants.Category.GetViewerPath(category.Id)),
+            Check check => (check.CheckNumber.ToString(), "#ffffff", Constants.Check.GetViewerPath(check.Id)),
+            Forecast forecast => (forecast.Category?.Name ?? "", forecast.Category?.Color ?? "#ffffff", Constants.Forecast.GetViewerPath(forecast.Id)),
+            Tag tag => (tag.Name, tag.Color, Constants.Tag.GetViewerPath(tag.Id)),
+            Transaction transaction => (transaction.Amount.ToCurrency(), transaction.Amount.ToColor(), Constants.Transaction.GetViewerPath(transaction.Id)),
+            _ => throw new ArgumentOutOfRangeException()
+            };
+        return @<td style="background-color: @color"><a href="@link">@display</a></td>;
+    }
+}
