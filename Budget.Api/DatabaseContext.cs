@@ -8,9 +8,6 @@ public class DatabaseContext : DbContext, IDatabaseContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=Budget;User Id=postgres;Password=postgres;");
-        optionsBuilder.EnableSensitiveDataLogging();
-        optionsBuilder.EnableDetailedErrors();
-        optionsBuilder.LogTo(Console.WriteLine);
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
