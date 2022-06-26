@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Budget.Api.MealHistory;
 
 namespace Budget.Api;
 
@@ -16,6 +17,7 @@ public class Startup
             option.AddPolicy("allowedOrigin",
                 builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
         });
+        MealHistoryStartup.ConfigureServices(services);
     }
 
     public void Configure(IApplicationBuilder app)
@@ -31,5 +33,6 @@ public class Startup
             endpoints.MapDefaultControllerRoute();
         });
         app.ApplicationServices.GetService<IDatabaseContext>()?.Migrate();
+        MealHistoryStartup.Configure(app);
     }
 }

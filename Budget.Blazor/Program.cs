@@ -1,3 +1,4 @@
+using Budget.Blazor.MealHistory;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 
@@ -21,6 +22,7 @@ public class Program
         builder.Services.AddTransient<INavigationItem, CheckCatalogue>();
         builder.Services.AddTransient<INavigationItem, ForecastCatalogue>();
         builder.Services.AddTransient<INavigationItem, Home>();
+        builder.Services.AddTransient<INavigationItem, MealCatalogue>();
         builder.Services.AddTransient<INavigationItem, TagCatalogue>();
         builder.Services.AddTransient<INavigationItem, TransactionCatalogue>();
 

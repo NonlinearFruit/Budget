@@ -62,6 +62,15 @@ public static class Constants
         public static string GetViewerPath(long id) => $"/Check/{id}";
     }
 
+    public static class Meal
+    {
+        public const string CataloguePath = "/Meals";
+        public const string UpsertorPath = "/UpsertMeal/{Id:long?}";
+        public const string ViewerPath = "/Meal/{Id:long}";
+        public static string GetUpsertPath(long? id = null) => $"/UpsertMeal/{id?.ToString() ?? ""}";
+        public static string GetViewerPath(long id) => $"/Meal/{id}";
+    }
+
     public static class Api
     {
         public static string GetTransactions()

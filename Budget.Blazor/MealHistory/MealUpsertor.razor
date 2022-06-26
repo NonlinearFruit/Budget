@@ -1,0 +1,83 @@
+@attribute [Route(Constants.Meal.UpsertorPath)]
+
+@using Microsoft.AspNetCore.Components
+@using Budget.Shared
+@using Budget.Shared.MealHistory
+
+@inject NavigationManager NavigationManager
+@inject HttpClient Http
+
+@if (Id == null)
+{
+    <h3>Create a Meal</h3>
+}
+else
+{
+    <h3>Update a Meal</h3>
+}
+
+
+<div class="row">
+    <EditForm Model="@Model" OnValidSubmit="@Upsert">
+        <DataAnnotationsValidator />
+        <ValidationSummary />
+
+        <div class="form-group">
+            Date: <InputDate id="date" @bind-Value="Model.Date" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Meal Time: <InputText id="mealTime" @bind-Value="Model.MealTime" class="form-control" />
+        </div>
+
+        <div class="form-group">
+            Food: <InputText id="food" @bind-Value="Model.Food" class="form-control" />
+        </div>
+
+        <br />
+
+        <button type="submit" class="btn btn-success">Update</button>
+    </EditForm>
+
+</div>
+
+<br />
+<br />
+<a href="@Constants.Meal.CataloguePath">Back to List</a>
+
+
+@code {
+    [Parameter]
+    public long? Id { get; set; }
+
+    private bool IsUpdate => Id == null;
+    private Meal Model = new();
+
+    protected override async Task OnInitializedAsync()
+    {
+        if (IsUpdate)
+        {
+            Model = new()
+            {
+                Date = DateTime.Now
+            };
+        }
+        else
+            Model = await Http.GetFromJsonAsync<Meal>($"Api/Meal/{Id}");
+    }
+
+    private async Task Upsert()
+    {
+        Model.Date = DateTime.SpecifyKind(Model.Date, DateTimeKind.Utc);
+        if (IsUpdate)
+        {
+            await Http.PostAsJsonAsync($"Api/Meal", Model);
+            NavigationManager.NavigateTo(Constants.Meal.CataloguePath);
+        }
+        else
+        {
+            await Http.PutAsJsonAsync($"Api/Meal/{Model.Id}", Model);
+            NavigationManager.NavigateTo(Constants.Meal.CataloguePath);
+        }
+    }
+}

@@ -32,10 +32,16 @@
  OR
 
  ```
- C:\Users\<user>\AppData\Local\Programs\pgAdmin 4\v6\runtime\pg_dump.exe --file "C:\\<path to backups>\\BUDGET~3.BAC" --host "localhost" --port "5432" --username "postgres" --no-password --verbose --format=p "Budget"
+"C:\Users\bbolen\AppData\Local\Programs\pgAdmin 4\v6\runtime\pg_dump.exe" --file "C:\\Users\\bbolen\\BUDGET-22-06-25.BAC" --host "localhost" --port "5432" --username "postgres" --verbose --format=p "Budget" 
  ```
- 
- ## How to Restore Backup
+
+## How to Create Migrations
+
+```
+dotnet ef migrations add --project Budget.Api/Budget.Api.csproj --context Budget.Api.MealHistory.MealHistoryContext <MIGRATIONNAME>
+```
+
+## How to Restore Backup
  
  ```
  psql.exe Budget postgres < Budget.22.03.14.backup
