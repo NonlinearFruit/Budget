@@ -2,7 +2,7 @@ using Budget.Api.Utilities;
 using Budget.Shared;
 using Microsoft.EntityFrameworkCore;
 
-namespace Budget.Api;
+namespace Budget.Api.Budget;
 
 public class BudgetContext : ContextBase, IBudgetContext
 {

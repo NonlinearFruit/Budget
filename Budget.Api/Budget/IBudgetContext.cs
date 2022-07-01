@@ -2,7 +2,7 @@ using Budget.Shared;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 
-namespace Budget.Api;
+namespace Budget.Api.Budget;
 
 public interface IBudgetContext
 {

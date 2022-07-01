@@ -2,12 +2,13 @@ using System;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
+using Budget.Api.Budget;
 using Budget.Api.Tests.Utilities;
 using Budget.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Xunit;
 
-namespace Budget.Api.Tests.Tests;
+namespace Budget.Api.Tests.Tests.Budget;
 
 public class TransactionControllerTests : BudgetContextTests
 {

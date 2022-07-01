@@ -1,5 +1,6 @@
 using System;
 using Budget.Api.Tests.TestDoubles;
+using Budget.Api.Tests.TestDoubles.Budget;
 
 namespace Budget.Api.Tests.Utilities;
 

@@ -2,51 +2,51 @@ using Budget.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Budget.Api
+namespace Budget.Api.Budget
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TagController : ControllerBase
+    public class CheckController : ControllerBase
     {
         private readonly IBudgetContext _context;
 
-        public TagController(IBudgetContext context)
+        public CheckController(IBudgetContext context)
         {
             _context = context;
         }
 
-        // GET: api/Tag
+        // GET: api/Check
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Tag>>> GetTags()
+        public async Task<ActionResult<IEnumerable<Check>>> GetChecks()
         {
-            return await _context.Tags.OrderBy(t => t.Name).ToListAsync();
+            return await _context.Checks.OrderBy(c => c.CheckNumber).ToListAsync();
         }
 
-        // GET: api/Tag/5
+        // GET: api/Check/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Tag>> GetTag(long id)
+        public async Task<ActionResult<Check>> GetCheck(long id)
         {
-            var bankAccount = await _context.Tags.FindAsync(id);
+            var check = await _context.Checks.FindAsync(id);
 
-            if (bankAccount == null)
+            if (check == null)
             {
                 return NotFound();
             }
 
-            return bankAccount;
+            return check;
         }
 
-        // PUT: api/Tag/5
+        // PUT: api/Check/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutTag(long id, Tag bankAccount)
+        public async Task<IActionResult> PutCheck(long id, Check check)
         {
-            if (id != bankAccount.Id)
+            if (id != check.Id)
             {
                 return BadRequest();
             }
 
-            _context.Entry(bankAccount).State = EntityState.Modified;
+            _context.Entry(check).State = EntityState.Modified;
 
             try
             {
@@ -54,7 +54,7 @@ namespace Budget.Api
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!TagExists(id))
+                if (!CheckExists(id))
                 {
                     return NotFound();
                 }
@@ -67,36 +67,36 @@ namespace Budget.Api
             return NoContent();
         }
 
-        // POST: api/Tag
+        // POST: api/Check
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Tag>> PostTag(Tag bankAccount)
+        public async Task<ActionResult<Check>> PostCheck(Check check)
         {
-            _context.Tags.Add(bankAccount);
+            _context.Checks.Add(check);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetTag", new { id = bankAccount.Id }, bankAccount);
+            return CreatedAtAction("GetCheck", new { id = check.Id }, check);
         }
 
-        // DELETE: api/Tag/5
+        // DELETE: api/Check/5
         [HttpDelete("{id}")]
-        public async Task<IActionResult> DeleteTag(long id)
+        public async Task<IActionResult> DeleteCheck(long id)
         {
-            var bankAccount = await _context.Tags.FindAsync(id);
-            if (bankAccount == null)
+            var check = await _context.Checks.FindAsync(id);
+            if (check == null)
             {
                 return NotFound();
             }
 
-            _context.Tags.Remove(bankAccount);
+            _context.Checks.Remove(check);
             await _context.SaveChangesAsync();
 
             return NoContent();
         }
 
-        private bool TagExists(long id)
+        private bool CheckExists(long id)
         {
-            return _context.Tags.Any(e => e.Id == id);
+            return _context.Checks.Any(e => e.Id == id);
         }
     }
 }

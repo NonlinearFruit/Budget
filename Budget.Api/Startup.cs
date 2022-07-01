@@ -1,4 +1,5 @@
 using System.Text.Json.Serialization;
+using Budget.Api.Budget;
 using Budget.Api.MealHistory;
 
 namespace Budget.Api;

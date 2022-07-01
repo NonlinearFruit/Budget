@@ -1,10 +1,11 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Budget.Api.Budget;
 using Budget.Api.Tests.Utilities;
 using Budget.Shared;
 using Xunit;
 
-namespace Budget.Api.Tests.Tests;
+namespace Budget.Api.Tests.Tests.Budget;
 
 public class CheckControllerTests : BudgetContextTests
 {

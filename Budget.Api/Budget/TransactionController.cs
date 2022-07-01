@@ -2,7 +2,7 @@ using Budget.Shared;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
-namespace Budget.Api
+namespace Budget.Api.Budget
 {
     [Route("api/[controller]")]
     [ApiController]

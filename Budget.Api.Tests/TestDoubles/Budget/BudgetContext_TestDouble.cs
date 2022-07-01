@@ -1,8 +1,9 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using Budget.Api.Budget;
 using Microsoft.EntityFrameworkCore;
 
-namespace Budget.Api.Tests.TestDoubles;
+namespace Budget.Api.Tests.TestDoubles.Budget;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
 public class BudgetContext_TestDouble : BudgetContext
