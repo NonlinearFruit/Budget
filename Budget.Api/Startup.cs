@@ -12,12 +12,12 @@ public class Startup
             .AddJsonOptions(options => options.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
         services.AddEndpointsApiExplorer();
         services.AddSwaggerGen();
-        services.AddTransient<IBudgetContext, BudgetContext>();
         services.AddCors(option =>
         {
             option.AddPolicy("allowedOrigin",
                 builder => builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
         });
+        BudgetStartup.ConfigureServices(services);
         MealHistoryStartup.ConfigureServices(services);
     }
 
@@ -33,7 +33,7 @@ public class Startup
         {
             endpoints.MapDefaultControllerRoute();
         });
-        app.ApplicationServices.GetService<IBudgetContext>()?.Migrate();
+        BudgetStartup.Configure(app);
         MealHistoryStartup.Configure(app);
     }
 }
