@@ -8,9 +8,9 @@ namespace Budget.Api
     [ApiController]
     public class CategoryController : ControllerBase
     {
-        private readonly IDatabaseContext _context;
+        private readonly IBudgetContext _context;
 
-        public CategoryController(IDatabaseContext context)
+        public CategoryController(IBudgetContext context)
         {
             _context = context;
         }

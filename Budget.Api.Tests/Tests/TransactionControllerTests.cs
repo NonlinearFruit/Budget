@@ -9,7 +9,7 @@ using Xunit;
 
 namespace Budget.Api.Tests.Tests;
 
-public class TransactionControllerTests : DbContextTests
+public class TransactionControllerTests : BudgetContextTests
 {
     private readonly TransactionController _controller;
 

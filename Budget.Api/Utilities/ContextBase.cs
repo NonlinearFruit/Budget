@@ -1,26 +1,19 @@
 using Budget.Shared;
 using Microsoft.EntityFrameworkCore;
 
-namespace Budget.Api;
+namespace Budget.Api.Utilities;
 
-public class DatabaseContext : DbContext, IDatabaseContext
+public abstract class ContextBase : DbContext
 {
+    protected string DatabaseSchema { get; set; } = "public";
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
-        optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=Budget;User Id=postgres;Password=postgres;");
+        optionsBuilder.UseNpgsql("Server=127.0.0.1;Port=5432;Database=Budget;User Id=postgres;Password=postgres;", o => o.MigrationsHistoryTable("__EFMigrationsHistory", DatabaseSchema));
     }
 
-    protected override void OnModelCreating(ModelBuilder builder)
+    protected void ConfigureCreatedPropertyToDefault(ModelBuilder builder, params Type[] entityTypes)
     {
-        var entityTypes = new []
-        {
-            typeof(BankAccount),
-            typeof(Category),
-            typeof(Check),
-            typeof(Forecast),
-            typeof(Tag),
-            typeof(Transaction)
-        };
         foreach(var type in entityTypes)
             builder
                 .Entity(type)
@@ -28,7 +21,7 @@ public class DatabaseContext : DbContext, IDatabaseContext
                 .HasDefaultValueSql("now()");
     }
 
-    Task<int> IDatabaseContext.SaveChangesAsync()
+    public Task<int> SaveChangesAsync()
     {
         var now = new DateTime(DateTime.Now.Ticks, DateTimeKind.Utc);
 
@@ -46,13 +39,6 @@ public class DatabaseContext : DbContext, IDatabaseContext
 
         return base.SaveChangesAsync();
     }
-
-    public DbSet<BankAccount> BankAccounts { get; set; }
-    public DbSet<Category> Categories { get; set; }
-    public DbSet<Check> Checks { get; set; }
-    public DbSet<Forecast> Forecasts { get; set; }
-    public DbSet<Tag> Tags { get; set; }
-    public DbSet<Transaction> Transactions { get; set; }
 
     public void Migrate()
     {

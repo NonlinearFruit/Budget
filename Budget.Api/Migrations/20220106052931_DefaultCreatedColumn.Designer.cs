@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Budget.Api.Migrations
 {
-    [DbContext(typeof(DatabaseContext))]
+    [DbContext(typeof(BudgetContext))]
     [Migration("20220106052931_DefaultCreatedColumn")]
     partial class DefaultCreatedColumn
     {

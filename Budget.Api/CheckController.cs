@@ -8,9 +8,9 @@ namespace Budget.Api
     [ApiController]
     public class CheckController : ControllerBase
     {
-        private readonly IDatabaseContext _context;
+        private readonly IBudgetContext _context;
 
-        public CheckController(IDatabaseContext context)
+        public CheckController(IBudgetContext context)
         {
             _context = context;
         }

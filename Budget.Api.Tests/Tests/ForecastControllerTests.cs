@@ -10,7 +10,7 @@ using Xunit;
 
 namespace Budget.Api.Tests.Tests;
 
-public class ForecastControllerTests : DbContextTests
+public class ForecastControllerTests : BudgetContextTests
 {
     private readonly ForecastController _controller;
 

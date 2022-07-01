@@ -8,9 +8,9 @@ namespace Budget.Api
     [ApiController]
     public class TagController : ControllerBase
     {
-        private readonly IDatabaseContext _context;
+        private readonly IBudgetContext _context;
 
-        public TagController(IDatabaseContext context)
+        public TagController(IBudgetContext context)
         {
             _context = context;
         }

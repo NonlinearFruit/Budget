@@ -8,9 +8,9 @@ namespace Budget.Api
     [ApiController]
     public class BankAccountController : ControllerBase
     {
-        private readonly IDatabaseContext _context;
+        private readonly IBudgetContext _context;
 
-        public BankAccountController(IDatabaseContext context)
+        public BankAccountController(IBudgetContext context)
         {
             _context = context;
         }

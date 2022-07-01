@@ -5,7 +5,7 @@ using Xunit;
 
 namespace Budget.Api.Tests.Tests;
 
-public class CategoryControllerTests : DbContextTests
+public class CategoryControllerTests : BudgetContextTests
 {
     private readonly CategoryController _controller;
 

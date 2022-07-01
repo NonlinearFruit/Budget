@@ -6,7 +6,7 @@ using Xunit;
 
 namespace Budget.Api.Tests.Tests;
 
-public class CheckControllerTests : DbContextTests
+public class CheckControllerTests : BudgetContextTests
 {
     private readonly CheckController _controller;
 

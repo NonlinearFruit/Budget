@@ -8,7 +8,7 @@ using Xunit;
 
 namespace Budget.Api.Tests.Tests;
 
-public class BankAccountControllerTests : DbContextTests
+public class BankAccountControllerTests : BudgetContextTests
 {
     private readonly BankAccountController _controller;
 

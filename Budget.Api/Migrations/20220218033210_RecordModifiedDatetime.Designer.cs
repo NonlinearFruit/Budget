@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Budget.Api.Migrations
 {
-    [DbContext(typeof(DatabaseContext))]
+    [DbContext(typeof(BudgetContext))]
     [Migration("20220218033210_RecordModifiedDatetime")]
     partial class RecordModifiedDatetime
     {

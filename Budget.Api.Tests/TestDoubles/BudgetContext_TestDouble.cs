@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore;
 namespace Budget.Api.Tests.TestDoubles;
 
 [SuppressMessage("ReSharper", "InconsistentNaming")]
-public class DatabaseContext_TestDouble : DatabaseContext
+public class BudgetContext_TestDouble : BudgetContext
 {
     private readonly string _id;
 
-    public DatabaseContext_TestDouble(string? id = null)
+    public BudgetContext_TestDouble(string? id = null)
     {
         _id = id ?? Guid.NewGuid().ToString();
     }

@@ -8,9 +8,9 @@ namespace Budget.Api
     [ApiController]
     public class ForecastController : ControllerBase
     {
-        private readonly IDatabaseContext _context;
+        private readonly IBudgetContext _context;
 
-        public ForecastController(IDatabaseContext context)
+        public ForecastController(IBudgetContext context)
         {
             _context = context;
         }

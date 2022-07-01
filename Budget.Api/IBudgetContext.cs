@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 
 namespace Budget.Api;
 
-public interface IDatabaseContext
+public interface IBudgetContext
 {
     DbSet<BankAccount> BankAccounts { get; set; }
     DbSet<Tag> Tags { get; set; }
