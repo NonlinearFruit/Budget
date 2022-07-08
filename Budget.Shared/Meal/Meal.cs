@@ -1,7 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace Budget.Shared.MealHistory;
+namespace Budget.Shared.Meal;
 
 [Table(nameof(Meal), Schema="MealHistory")]
 public class Meal : BaseEntity

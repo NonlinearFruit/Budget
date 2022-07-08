@@ -1,24 +1,22 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Budget.Shared;
-using Budget.Shared.MealHistory;
 
-namespace Budget.Api.MealHistory
+namespace Budget.Api.Meal
 {
     [Route("api/[controller]")]
     [ApiController]
     public class MealController : ControllerBase
     {
-        private readonly IMealHistoryContext _context;
+        private readonly IMealContext _context;
 
-        public MealController(IMealHistoryContext context)
+        public MealController(IMealContext context)
         {
             _context = context;
         }
 
         // GET: api/Meal
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Meal>>> GetMeals()
+        public async Task<ActionResult<IEnumerable<Shared.Meal.Meal>>> GetMeals()
         {
             if (_context.Meals == null)
             {
@@ -30,7 +28,7 @@ namespace Budget.Api.MealHistory
 
         // GET: api/Meal/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Meal>> GetMeal(long id)
+        public async Task<ActionResult<Shared.Meal.Meal>> GetMeal(long id)
         {
             if (_context.Meals == null)
             {
@@ -50,7 +48,7 @@ namespace Budget.Api.MealHistory
         // PUT: api/Meal/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutMeal(long id, Meal meal)
+        public async Task<IActionResult> PutMeal(long id, Shared.Meal.Meal meal)
         {
             if (id != meal.Id)
             {
@@ -81,7 +79,7 @@ namespace Budget.Api.MealHistory
         // POST: api/Meal
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
         [HttpPost]
-        public async Task<ActionResult<Meal>> PostMeal(Meal meal)
+        public async Task<ActionResult<Shared.Meal.Meal>> PostMeal(Shared.Meal.Meal meal)
         {
             if (_context.Meals == null)
             {

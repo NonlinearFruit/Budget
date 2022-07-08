@@ -1,4 +1,4 @@
-using Budget.Api.MealHistory;
+using Budget.Api.Meal;
 
 namespace Budget.Api.Tests.Tests.MealHistory;
 

@@ -1,14 +1,14 @@
-namespace Budget.Api.MealHistory;
+namespace Budget.Api.Meal;
 
 public static class MealHistoryStartup
 {
     public static void ConfigureServices(IServiceCollection services)
     {
-        services.AddTransient<IMealHistoryContext, MealHistoryContext>();
+        services.AddTransient<IMealContext, MealContext>();
     }
 
     public static void Configure(IApplicationBuilder app)
     {
-        app.ApplicationServices.GetService<IMealHistoryContext>()?.Migrate();
+        app.ApplicationServices.GetService<IMealContext>()?.Migrate();
     }
 }
