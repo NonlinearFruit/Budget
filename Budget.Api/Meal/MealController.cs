@@ -23,7 +23,11 @@ namespace Budget.Api.Meal
                 return NotFound();
             }
 
-            return await _context.Meals.ToListAsync();
+            return await _context
+                .Meals
+                .OrderByDescending(m => m.Date)
+                .ThenByDescending(m => m.MealTime)
+                .ToListAsync();
         }
 
         // GET: api/Meal/5
