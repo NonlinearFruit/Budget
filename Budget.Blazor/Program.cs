@@ -1,4 +1,5 @@
 using Budget.Blazor.MealHistory;
+using Budget.Blazor.Utilities;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 

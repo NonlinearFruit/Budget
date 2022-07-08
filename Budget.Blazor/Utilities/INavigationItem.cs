@@ -1,4 +1,4 @@
-namespace Budget.Blazor;
+namespace Budget.Blazor.Utilities;
 
 public interface INavigationItem
 {
