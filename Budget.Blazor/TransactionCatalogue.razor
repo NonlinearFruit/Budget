@@ -1,5 +1,4 @@
 @attribute [Route(Constants.Transaction.CataloguePath)]
-@using Budget.Shared
 @implements INavigationItem
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
@@ -7,24 +6,11 @@
 
 <h3>All Transactions</h3>
 
-<button class="btn btn-success" onclick="@Refresh">Refresh</button>
-
-<TransactionCatalogueElement Transactions="@Transactions"/>
+<TransactionCatalogueElement GetTransactionsUrl="@Constants.Api.GetTransactions()"/>
 
 
 @code {
     public string Path => Constants.Transaction.CataloguePath;
     public string Title => "Transactions";
     public string Icon => "oi-transfer";
-    public IList<Transaction> Transactions { get; set; }
-
-    protected override async Task OnInitializedAsync()
-    {
-        await Refresh();
-    }
-
-    private async Task Refresh()
-    {
-        Transactions = await Http.GetFromJsonAsync<IList<Transaction>>(Constants.Api.GetTransactions());
-    }
 }

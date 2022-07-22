@@ -1,4 +1,5 @@
 @using Budget.Shared
+@using System.Web
 @inject HttpClient Http
 @inject NavigationManager NavigationManager
 @inject IJSRuntime Js
@@ -9,6 +10,14 @@
 }
 else
 {
+    <button class="btn btn-success" onclick="@Constants.Transaction.GetUpsertPath()">New</button>
+    @if (NeedsPaging())
+    {
+        <button class="btn btn-secondary" onclick="@LoadPreviousPage">&lt;&lt; @CurrentPage.AddMonths(-1).Month-@CurrentPage.AddMonths(-1).Year</button>
+        <button class="btn btn-secondary" onclick="@Refresh">Refresh @CurrentPage.Month-@CurrentPage.Year</button>
+        <button class="btn btn-secondary" onclick="@LoadNextPage">@CurrentPage.AddMonths(1).Month-@CurrentPage.AddMonths(1).Year &gt;&gt;</button>
+        <button class="btn btn-info" onclick="@LoadAll">All</button>
+    }
     <table class="table">
         <thead>
             <tr>
@@ -21,30 +30,79 @@ else
             </tr>
         </thead>
         <tbody>
-            @foreach (var transaction in Transactions)
-            {
-                <tr>
-                    <ViewLinkedTableCell Object="@transaction.Account"/>
-                    <ViewLinkedTableCell Object="@transaction.Category"/>
-                    <ViewLinkedTableCell Object="@transaction.Tag"/>
-                    <ViewLinkedTableCell Object="@transaction"/>
-                    <td>@transaction.When.ToShortDateString()</td>
-                    <td>@transaction.Description</td>
-                    <td><a href="@Constants.Transaction.GetUpsertPath(transaction.Id)" class="btn btn-info">Edit</a></td>
-                    <td><a @onclick="(() => Delete(transaction.Id))" class="btn btn-danger">Delete</a></td>
-                </tr>
-            }
+        @foreach (var transaction in Transactions)
+        {
+            <tr>
+                <ViewLinkedTableCell Object="@transaction.Account"/>
+                <ViewLinkedTableCell Object="@transaction.Category"/>
+                <ViewLinkedTableCell Object="@transaction.Tag"/>
+                <ViewLinkedTableCell Object="@transaction"/>
+                <td>@transaction.When.ToShortDateString()</td>
+                <td>@transaction.Description</td>
+                <td><a href="@Constants.Transaction.GetUpsertPath(transaction.Id)" class="btn btn-info">Edit</a></td>
+                <td><a @onclick="(() => Delete(transaction.Id))" class="btn btn-danger">Delete</a></td>
+            </tr>
+        }
         </tbody>
     </table>
-
-    <a href="@Constants.Transaction.GetUpsertPath()">Create an Transaction</a>
 }
 
 
 @code {
-
     [Parameter]
-    public IList<Transaction> Transactions { get; set; }
+    public string? GetTransactionsUrl { get; set; }
+
+    private IList<Transaction>? Transactions { get; set; }
+    private DateOnly CurrentPage { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        CurrentPage = DateOnly.FromDateTime(DateTime.Now);
+        GetTransactionsUrl ??= Constants.Api.GetTransactions();
+        await Refresh();
+    }
+
+    private bool NeedsPaging()
+    {
+        return !GetTransactionsUrl.Contains("year") && !GetTransactionsUrl.Contains("month");
+    }
+
+    private async Task LoadNextPage()
+    {
+        CurrentPage = CurrentPage.AddMonths(1);
+        await Refresh();
+    }
+
+    private async Task LoadPreviousPage()
+    {
+        CurrentPage = CurrentPage.AddMonths(-1);
+        await Refresh();
+    }
+
+    private async Task Refresh()
+    {
+        await LoadPage(CurrentPage);
+    }
+
+    private async Task LoadPage(DateOnly currentPage)
+    {
+        var queryParameters = GetTransactionsUrl.Contains("?")
+            ? GetTransactionsUrl.Split("?")[1]
+            : "";
+        var parameters = HttpUtility.ParseQueryString(queryParameters);
+        parameters.Set("year", CurrentPage.Year.ToString());
+        parameters.Set("month", CurrentPage.Month.ToString());
+        var urlBuilder = new UriBuilder(Http.BaseAddress+GetTransactionsUrl)
+        {
+            Query = parameters.ToString()
+        };
+        Transactions = await Http.GetFromJsonAsync<IList<Transaction>>(urlBuilder.Uri);
+    }
+
+    private async Task LoadAll()
+    {
+        Transactions = await Http.GetFromJsonAsync<IList<Transaction>>(GetTransactionsUrl);
+    }
 
     private async Task Delete(long id)
     {

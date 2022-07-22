@@ -4,21 +4,25 @@
 @inject NavigationManager NavigationManager
 @inject HttpClient Http
 
+@if (Category == default)
+{
+    <p>Loading...</p>
+}
+else
+{
+    <h3 style="background-color: @Category.Color">@Category.Name Category Details</h3>
 
-<h3 style="background-color: @Category.Color">@Category.Name Category Details</h3>
-
-<br />
-<TransactionCatalogueElement Transactions="@Transactions"></TransactionCatalogueElement>
-<br />
-<a href="@Constants.Category.ViewerPath">Back to List</a>
-
+    <br />
+    <TransactionCatalogueElement GetTransactionsUrl="@Constants.Api.GetTransactions(Category)"/>
+    <br />
+    <a href="@Constants.Category.ViewerPath">Back to List</a>
+}
 
 @code {
     [Parameter]
     public long? Id { get; set; }
 
-    public Category Category { get; set; } = new();
-    public IList<Transaction> Transactions { get; set; }
+    private Category? Category { get; set; }
 
     protected override async Task OnInitializedAsync()
     {
@@ -28,6 +32,5 @@
         }
 
         Category = await Http.GetFromJsonAsync<Category>($"Api/Category/{Id}");
-        Transactions = await Http.GetFromJsonAsync<IList<Transaction>>(Constants.Api.GetTransactions(Category));
     }
 }
