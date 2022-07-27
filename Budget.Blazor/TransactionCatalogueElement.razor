@@ -10,7 +10,7 @@
 }
 else
 {
-    <button class="btn btn-success" onclick="@Constants.Transaction.GetUpsertPath()">New</button>
+    <button class="btn btn-success" onclick="@(() => NavigationManager.NavigateTo(Constants.Transaction.GetUpsertPath()))">New</button>
     @if (NeedsPaging())
     {
         <button class="btn btn-secondary" onclick="@LoadPreviousPage">&lt;&lt; @CurrentPage.AddMonths(-1).Month-@CurrentPage.AddMonths(-1).Year</button>

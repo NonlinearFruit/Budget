@@ -14,6 +14,8 @@
 }
 else
 {
+    <button class="btn btn-success" onclick="@(() => NavigationManager.NavigateTo(Constants.Meal.GetUpsertPath()))">New</button>
+
     <table class="table">
         <thead>
             <tr>
@@ -37,8 +39,6 @@ else
             }
         </tbody>
     </table>
-
-    <a href="@Constants.Meal.GetUpsertPath()">Create a Meal</a>
 }
 
 
