@@ -46,5 +46,19 @@ public class MealControllerTests : MealContextTests
             var meal = meals.Value.First();
             Assert.Equal(supper, meal.MealTime);
         }
+
+        [Fact]
+        public void ignores_time_of_day()
+        {
+            var date = DateTime.Now.Date;
+            var firstMeal = _arrangeContext.Meals.Add(new() {Date = date, MealTime = "", Food = ""}).Entity;
+            _arrangeContext.Meals.Add(new() {Date = date.AddHours(5), MealTime = "", Food = ""});
+            _arrangeContext.SaveChanges();
+
+            var meals = _controller.GetMeals().Result;
+
+            var meal = meals.Value.First();
+            Assert.Equal(firstMeal.Id, meal.Id);
+        }
     }
 }

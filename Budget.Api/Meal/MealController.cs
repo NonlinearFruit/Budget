@@ -25,7 +25,7 @@ namespace Budget.Api.Meal
 
             return await _context
                 .Meals
-                .OrderByDescending(m => m.Date)
+                .OrderByDescending(m => m.Date.Date)
                 .ThenByDescending(m => m.MealTime)
                 .ToListAsync();
         }
