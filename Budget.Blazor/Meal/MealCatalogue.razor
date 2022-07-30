@@ -28,7 +28,7 @@ else
         <tbody>
             @foreach (var meal in Meals!)
             {
-                <tr>
+                <tr style="background-color:#@GetDayColor(meal.Date)">
                     <td>@meal.Date.ToShortDateString()</td>
                     <td>@meal.Date.ToString("dddd")</td>
                     <td>@meal.MealTime</td>
@@ -63,4 +63,15 @@ else
             NavigationManager.NavigateTo(Constants.Meal.CataloguePath, forceLoad: true);
         }
     }
+
+    private string GetDayColor(DateTime date) => date.DayOfWeek switch {
+            DayOfWeek.Sunday => "f4cccc",
+            DayOfWeek.Monday => "fce5cd",
+            DayOfWeek.Tuesday => "fff2cc",
+            DayOfWeek.Wednesday => "d9ead3",
+            DayOfWeek.Thursday => "d0e0e3",
+            DayOfWeek.Friday => "cfe2f3",
+            DayOfWeek.Saturday => "d9d2e9",
+            _ => throw new ArgumentOutOfRangeException()
+        };
 }
